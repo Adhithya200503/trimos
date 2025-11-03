@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/get-user");
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-user`);
                 setUser(res.data.userData);
             } catch (err) {
                 console.error("Auth fetch failed:", err);
