@@ -8,7 +8,7 @@ import {
   Twitter,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import ShortUrl from "../../../backend/model/ShortUrl";
+ 
 
 const ShareDropdown = ({ link }) => {
  
