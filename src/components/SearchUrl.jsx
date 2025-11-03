@@ -6,7 +6,7 @@ const SearchUrl = ({ setUrls }) => {
 
   const handleSearch = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/search?tag=${tag}`,{withCredentials:true});
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/search?tag=${tag}`,{withCredentials:true});
       setUrls(res.data.results);
     } catch (err) {
       alert(err.response?.data?.message || "Error searching URLs");
