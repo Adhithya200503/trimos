@@ -20,7 +20,7 @@ const ShortLinksDashboard = () => {
       if (!user) return;
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:3000/short-urls", {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/short-urls`, {
           withCredentials: true,
         });
         setLinks(res.data);
@@ -44,7 +44,7 @@ const ShortLinksDashboard = () => {
     setMessage("");
     try {
       const res = await axios.get(
-        `http://localhost:3000/search?tag=${encodeURIComponent(tag)}`,
+        `${import.meta.env.VITE_BACKEND_URL}/search?tag=${encodeURIComponent(tag)}`,
         { withCredentials: true }
       );
       setLinks(res.data.results);
@@ -67,7 +67,7 @@ const ShortLinksDashboard = () => {
     setMessage("");
     try {
       const res = await axios.get(
-        `http://localhost:3000/search?date=${encodeURIComponent(date)}`,
+        `${import.meta.env.VITE_BACKEND_URL}/search?date=${encodeURIComponent(date)}`,
         { withCredentials: true }
       );
       setLinks(res.data.results);
@@ -84,7 +84,7 @@ const ShortLinksDashboard = () => {
   const handleDelete = async (slugName) => {
     if (!window.confirm("Are you sure you want to delete this link?")) return;
     try {
-      await axios.delete(`http://localhost:3000/delete/${slugName}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/delete/${slugName}`, {
         withCredentials: true,
       });
       setLinks((prev) => prev.filter((link) => link.slugName !== slugName));
