@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
     const logout = async () => {
         try {
-            await axios.post("http://localhost:3000/auth/logout", {}, { withCredentials: true });
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/logout`, {}, { withCredentials: true });
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {
