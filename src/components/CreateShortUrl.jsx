@@ -28,7 +28,7 @@ const CreateShortUrl = () => {
 
     try {
       const res = await axios.post(
-        "https://trim-url-gpxt.onrender.com",
+        "https://trim-url-gpxt.onrender.com/",
         {
           destinationUrl: formData.destinationUrl,
           slugName: formData.slugName,
