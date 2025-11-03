@@ -20,7 +20,7 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/auth/login", form, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, form, {
         withCredentials: true,
       });
       alert(res.data.message);
