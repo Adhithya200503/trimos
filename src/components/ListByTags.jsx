@@ -32,7 +32,7 @@ const ListByTags = () => {
   const handleDelete = async (slugName) => {
     if (!window.confirm("Are you sure you want to delete this link?")) return;
     try {
-      await axios.delete(`http://localhost:3000/delete/${slugName}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/delete/${slugName}`, {
         withCredentials: true,
       });
       setUrls((prev) => prev.filter((link) => link.slugName !== slugName));
