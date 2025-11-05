@@ -12,6 +12,7 @@ import LinkProtection from "../components/LinkProtection.jsx";
 import QRcode from "../components/QRcode.jsx";
 import UserQrCodes from "../components/UserQrCodes.jsx";
 import ProtectedRoute from "../components/ProtectedRouted.jsx";
+import LinkAnalytics from "../components/LinkAnalytics.jsx";
 
 const router = createBrowserRouter([
   {
@@ -59,8 +60,12 @@ const router = createBrowserRouter([
         element: <QRcode />,
       },
       {
-        path: "qr-codes",
+        path: "/qr-codes",
         element: <UserQrCodes />,
+      },
+      {
+        path:"/analytics/:slugName",
+        element:<LinkAnalytics />
       },
       {
         path: "*",
