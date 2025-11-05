@@ -40,7 +40,7 @@ const CreateShortUrl = () => {
         },
         { withCredentials: true }
       );
-      console.log(res.data)
+      console.log("the hello :",res.data)
       setShortUrl(res.data?.data?.shortUrl);
     } catch (err) {
       alert(err.response?.data?.message || "Error creating URL");
