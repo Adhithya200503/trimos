@@ -7,16 +7,17 @@ import {
   Calendar,
   Copy,
   Share2,
+  EyeIcon,
 } from "lucide-react";
 import { CiLock } from "react-icons/ci";
 import { CiUnlock } from "react-icons/ci";
 import { SiSimpleanalytics } from "react-icons/si";
 
-
 import CopyButton from "./ui/CopyButton";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ShareDropdown from "./ShareDropDown";
 const LinksList = ({ links, handleDelete, handleQRCode }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-y-4">
       {links.map((link) => (
@@ -53,7 +54,7 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
                     to={`/analytics/${link.slugName}`}
                     className="flex items-center gap-2"
                   >
-                    < SiSimpleanalytics size={16}  /> 
+                    <SiSimpleanalytics size={16} />
                     Analytics
                   </NavLink>
                 </li>
@@ -69,7 +70,7 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
                 </li>
                 <li>
                   <button
-                    onClick={() => handleQRCode(link.shortUrl,link.slugName)}
+                    onClick={() => handleQRCode(link.shortUrl, link.slugName)}
                     className="flex items-center gap-2"
                   >
                     <QrCode size={16} /> QR Code
@@ -121,7 +122,10 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
               )}
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-2">
+            <div className="flex items-center gap-4 text-xs text-gray-400 mt-2">
+              <div className="tooltip hover:tooltip-open hover:tooltip-top" data-tip="Analytics">
+                <SiSimpleanalytics className="hover:text-black cursor-pointer"  size={10} onClick={()=>navigate(`/analytics/${link.slugName}`)}/>
+              </div>
               <span>
                 Created: {new Date(link.createdAt).toLocaleDateString("en-IN")}
               </span>
@@ -130,6 +134,10 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
               ) : (
                 <CiUnlock className="text-gray-400 text-sm" />
               )}
+              <span className="flex gap-1.5">
+                <EyeIcon size={14} />
+                {link.clicks}
+              </span>
             </div>
           </div>
         </div>

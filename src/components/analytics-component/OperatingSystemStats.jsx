@@ -49,9 +49,9 @@ const OperatingSystemStats = ({OsStats}) => {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap- justify-around">
+    <div className="flex flex-col sm:flex-row  justify-around">
       <div className="overflow-x-auto w-sm sm:w-md">
-        <div className="flex justify-end mb-2">
+        <div className="flex mb-2">
           <select
             className="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-0"
             onChange={(e) => handleSelectChange(e.target.value)}
@@ -65,7 +65,7 @@ const OperatingSystemStats = ({OsStats}) => {
         <table className="table">
           <thead>
             <tr>
-              <th></th>
+              <th className="hidden sm:block"></th>
               <th>OS Name</th>
               <th>Total Clicks</th>
               <th>Percentage</th>
@@ -75,7 +75,7 @@ const OperatingSystemStats = ({OsStats}) => {
             {osStats.map((data, idx) => {
               return (
                 <tr key={data[0]}>
-                  <th>{idx + 1}</th>
+                  <th className="hidden sm:block">{idx + 1}</th>
                   <td>{data[0]}</td>
                   <td>{data[1]}</td>
 

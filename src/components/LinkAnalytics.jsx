@@ -9,6 +9,7 @@ import { CgBrowser } from "react-icons/cg";
 import { FaMicrosoft } from "react-icons/fa";
 import RegionStatsTable from "./analytics-component/LocationStats";
 import { CiLocationOn } from "react-icons/ci";
+import LinkStatsPDF from "./analytics-component/LinkStatsPdf";
 
 const LinkAnalytics = () => {
   const [url, setUrl] = useState({});
@@ -32,7 +33,7 @@ const LinkAnalytics = () => {
   return (
     <div className="relative">
       <div className="flex justify-end">
-        <button className="btn btn-primary">Export as Pdf</button>
+         <LinkStatsPDF linkData={url} />
       </div>
       <div className="flex flex-col gap-12">
         <p className="text-2xl mb-4 flex gap-4 items-center">
