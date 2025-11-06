@@ -1,22 +1,21 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#9c27b0", "#e91e63"];
-const BrowserStatsTable = ({ browserStats }) => {
-  if (browserStats === undefined) {
+const OperatingSystemStats = ({OsStats}) => {
+  if (OsStats === undefined) {
     return <p>Loading stats...</p>;
   }
- 
-  const [stats, setStats] = useState(() => Object.entries(browserStats));
+
+  const [osStats, setOsStats] = useState(() => Object.entries(OsStats));
   let pieChartStats = [];
-  pieChartStats = Object.entries(browserStats).map(([key, val]) => {
+  pieChartStats = Object.entries(OsStats).map(([key, val]) => {
     return {
       name: key,
       value: val,
     };
   });
-  console.log(pieChartStats);
-  if (stats.length === 0) {
+  console.log(OsStats);
+  if (osStats.length === 0) {
     return (
       <div className="text-center mt-4">
         <p>No browser statistics available.</p>
@@ -25,7 +24,7 @@ const BrowserStatsTable = ({ browserStats }) => {
   }
 
   function calculatePercentage(browserClicks) {
-    let totalClicks = Object.values(browserStats).reduce(
+    let totalClicks = Object.values(OsStats).reduce(
       (acc, num) => acc + num,
       0
     );
@@ -38,7 +37,7 @@ const BrowserStatsTable = ({ browserStats }) => {
   }
 
   function handleSelectChange(option) {
-    let sortedStats = [...stats];
+    let sortedStats = [...osStats];
 
     if (option === "h") {
       sortedStats.sort((a, b) => b[1] - a[1]);
@@ -46,7 +45,7 @@ const BrowserStatsTable = ({ browserStats }) => {
       sortedStats.sort((a, b) => a[1] - b[1]);
     }
 
-    setStats(sortedStats);
+    setOsStats(sortedStats);
   }
 
   return (
@@ -67,13 +66,13 @@ const BrowserStatsTable = ({ browserStats }) => {
           <thead>
             <tr>
               <th></th>
-              <th>Browser Name</th>
+              <th>OS Name</th>
               <th>Total Clicks</th>
               <th>Percentage</th>
             </tr>
           </thead>
           <tbody>
-            {stats.map((data, idx) => {
+            {osStats.map((data, idx) => {
               return (
                 <tr key={data[0]}>
                   <th>{idx + 1}</th>
@@ -101,10 +100,12 @@ const BrowserStatsTable = ({ browserStats }) => {
           ))}
         </Pie>
         <Tooltip />
-        <Legend />
+        <div className="mt-4">
+            <Legend />
+        </div>
       </PieChart>
     </div>
   );
 };
 
-export default BrowserStatsTable;
+export default OperatingSystemStats;

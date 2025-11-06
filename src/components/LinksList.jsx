@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { CiLock } from "react-icons/ci";
 import { CiUnlock } from "react-icons/ci";
+import { SiSimpleanalytics } from "react-icons/si";
+
 
 import CopyButton from "./ui/CopyButton";
 import { NavLink } from "react-router-dom";
@@ -44,6 +46,15 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
                     className="flex items-center gap-2"
                   >
                     <Eye size={16} /> View
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={`/analytics/${link.slugName}`}
+                    className="flex items-center gap-2"
+                  >
+                    < SiSimpleanalytics size={16}  /> 
+                    Analytics
                   </NavLink>
                 </li>
                 <li>
