@@ -260,7 +260,7 @@ const LinkEditPage = () => {
             linkData.tags.map((tag, index) => (
               <div
                 key={index}
-                className="badge badge-primary gap-2 px-3 py-3 text-sm"
+                className="badge select-none rounded-none bg-gray-200 gap-2 px-3 py-3 text-sm"
               >
                 {tag}
                 <X

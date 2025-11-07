@@ -8,15 +8,27 @@ import {
   Copy,
   Share2,
   EyeIcon,
+  RefreshCcw,
 } from "lucide-react";
 import { CiLock } from "react-icons/ci";
 import { CiUnlock } from "react-icons/ci";
 import { SiSimpleanalytics } from "react-icons/si";
+import { FaCircle } from "react-icons/fa";
 
 import CopyButton from "./ui/CopyButton";
 import { NavLink, useNavigate } from "react-router-dom";
 import ShareDropdown from "./ShareDropDown";
-const LinksList = ({ links, handleDelete, handleQRCode }) => {
+const LinksList = ({
+  links,
+  handleDelete,
+  handleQRCode,
+  handleActiveToggle,
+  activeLoading,
+  setActiveLoading,
+  handleProtectedToggle,
+  passwordChangeLoading,
+  setPasswordChangeLoading,
+}) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-y-4">
@@ -60,16 +72,6 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
                 </li>
                 <li>
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(link.shortUrl);
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <Copy size={16} /> Copy
-                  </button>
-                </li>
-                <li>
-                  <button
                     onClick={() => handleQRCode(link.shortUrl, link.slugName)}
                     className="flex items-center gap-2"
                   >
@@ -87,18 +89,21 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
               </ul>
             </div>
             {/* Card Content */}
-            <h3 className="text-lg font-semibold text-primary wrap-break-word pt-4 sm:pt-0">
+            <div className="text-lg font-semibold text-primary wrap-break-word pt-4 sm:pt-0 flex items-center gap-4">
               <a
                 href={link.shortUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="link text-black"
+                className="link text-[#2A5BDA] no-underline"
               >
                 {`${import.meta.env.VITE_BACKEND_URL}/${link.slugName}`}
+                
               </a>
-            </h3>
+              <CopyButton text={`${import.meta.env.VITE_BACKEND_URL}/${link.slugName}`} />
+            </div>
 
-            <p className="text-sm text-gray-500 truncate">
+            <p className="text-sm text-gray-500 truncate flex items-center gap-2">
+              <RefreshCcw size={14} />
               <a
                 href={link.destinationUrl}
                 target="_blank"
@@ -113,7 +118,10 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
             <div className="flex flex-wrap gap-1 mt-2">
               {link.tags?.length > 0 ? (
                 link.tags.map((tag) => (
-                  <span key={tag} className="badge badge-outline badge-primary">
+                  <span
+                    key={tag}
+                    className="badge select-none rounded-none bg-gray-200"
+                  >
                     {tag}
                   </span>
                 ))
@@ -123,21 +131,57 @@ const LinksList = ({ links, handleDelete, handleQRCode }) => {
             </div>
 
             <div className="flex items-center gap-4 text-xs text-gray-400 mt-2">
-              <div className="tooltip hover:tooltip-open hover:tooltip-top" data-tip="Analytics">
-                <SiSimpleanalytics className="hover:text-black cursor-pointer"  size={10} onClick={()=>navigate(`/analytics/${link.slugName}`)}/>
+              <div
+                className="tooltip hover:tooltip-open hover:tooltip-top"
+                data-tip="Analytics"
+              >
+                <SiSimpleanalytics
+                  className="hover:text-black cursor-pointer"
+                  size={10}
+                  onClick={() => navigate(`/analytics/${link.slugName}`)}
+                />
               </div>
               <span>
                 Created: {new Date(link.createdAt).toLocaleDateString("en-IN")}
               </span>
-              {link.protected ? (
-                <CiLock className="text-gray-500 text-sm" />
+              {passwordChangeLoading === link._id ? (
+                <span className="flex gap-1.5 cursor-pointer select-none items-center">
+                  Switching
+                </span>
               ) : (
-                <CiUnlock className="text-gray-400 text-sm" />
+                <span
+                  className="flex gap-1.5 items-center cursor-pointer select-none"
+                  onClick={() => handleProtectedToggle(link._id, link.slugName)}
+                >
+                  {link.protected ? (
+                    <CiLock className="text-gray-500 text-sm" />
+                  ) : (
+                    <CiUnlock className="text-gray-400 text-sm" />
+                  )}
+                </span>
               )}
+
               <span className="flex gap-1.5">
                 <EyeIcon size={14} />
                 {link.clicks}
               </span>
+              {activeLoading == link._id ? (
+                <span className="flex gap-1.5 cursor-pointer select-none ">
+                  <FaCircle size={14} className="text-green-800" />
+                  Switching
+                </span>
+              ) : (
+                <span className="flex gap-1.5">
+                  <FaCircle
+                    size={14}
+                    onClick={() => handleActiveToggle(link._id, link.slugName)}
+                    className={`${
+                      link.isActive ? "text-red-700" : "text-black"
+                    } cursor-pointer`}
+                  />
+                  {link.isActive ? "Active" : "Inactive"}
+                </span>
+              )}
             </div>
           </div>
         </div>

@@ -4,11 +4,15 @@ import { AuthContext } from "../context/authContext";
 import { TagIcon, ChevronDown } from "lucide-react";
 import LinksList from "./LinksList";
 import QRCode from "qrcode";
+import { LuRefreshCw } from "react-icons/lu";
+
 const ListByTags = () => {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [urls, setUrls] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeLoading, setActiveLoading] = useState(null);
+  const [passwordChangeLoading, setPasswordChangeLoading] = useState(null);
   const { user } = useContext(AuthContext);
 
   const handleTagToggle = (tag) => {
@@ -32,9 +36,12 @@ const ListByTags = () => {
   const handleDelete = async (slugName) => {
     if (!window.confirm("Are you sure you want to delete this link?")) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/delete/${slugName}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/delete/${slugName}`,
+        {
+          withCredentials: true,
+        }
+      );
       setUrls((prev) => prev.filter((link) => link.slugName !== slugName));
     } catch {
       alert("Failed to delete the link");
@@ -53,6 +60,74 @@ const ListByTags = () => {
       document.body.removeChild(link);
     } catch (error) {
       console.error("Error generating QR code:", error);
+    }
+  };
+  const handleActiveToggle = async (linkId, slugName) => {
+    console.log("triggered handle active field");
+    try {
+      setActiveLoading(linkId);
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/short-url/${slugName}`
+      );
+      console.log("previous", res.data);
+      const prevIsActiveValue = res.data.result.isActive;
+      console.log("previous_val", prevIsActiveValue);
+
+      // Toggle value
+      const postresponse = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkId}`,
+        { isActive: !prevIsActiveValue },
+        { withCredentials: true }
+      );
+
+      if (postresponse.data.result) {
+        alert(`Link status: ${prevIsActiveValue} → ${!prevIsActiveValue}`);
+      }
+      setUrls((prevUrls) =>
+        prevUrls.map((link) =>
+          link.slugName === slugName
+            ? { ...link, isActive: !link.isActive }
+            : link
+        )
+      );
+      console.log("after toggling", postresponse.data);
+    } catch (error) {
+      console.error(error);
+      alert("Error toggling active status: " + error.message);
+    } finally {
+      setTimeout(() => {
+        setActiveLoading(null);
+      }, 2000);
+    }
+  };
+  const handleProtectedToggle = async (linkId, slugName) => {
+    try {
+      setPasswordChangeLoading(linkId);
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/short-url/${slugName}`
+      );
+
+      const prevProtectedValue = res.data.result.protected;
+
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkId}`,
+        { protected: !prevProtectedValue },
+        { withCredentials: true }
+      );
+
+      setUrls((prevUrls) =>
+        prevUrls.map((link) =>
+          link.slugName === slugName
+            ? { ...link, protected: !link.protected }
+            : link
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      alert("Error toggling protected status: " + error.message);
+    } finally {
+      setTimeout(() => setPasswordChangeLoading(null), 1000);
     }
   };
 
@@ -138,6 +213,12 @@ const ListByTags = () => {
               links={urls}
               handleDelete={handleDelete}
               handleQRCode={handleQRCode}
+              handleActiveToggle={handleActiveToggle}
+              activeLoading={activeLoading}
+              setActiveLoading={setActiveLoading}
+              handleProtectedToggle={handleProtectedToggle}
+              passwordChangeLoading={passwordChangeLoading}
+              setPasswordChangeLoading={setPasswordChangeLoading}
             />
           </div>
         ) : (
