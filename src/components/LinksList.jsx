@@ -96,10 +96,10 @@ const LinksList = ({
                 rel="noreferrer"
                 className="link text-[#2A5BDA] no-underline"
               >
-                {`${import.meta.env.VITE_BACKEND_URL}/${link.slugName}`}
+                {link.shortUrl}
                 
               </a>
-              <CopyButton text={`${import.meta.env.VITE_BACKEND_URL}/${link.slugName}`} />
+              <CopyButton text={link.shortUrl} />
             </div>
 
             <p className="text-sm text-gray-500 truncate flex items-center gap-2">
