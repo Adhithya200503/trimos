@@ -13,7 +13,7 @@ const LinkProtection = () => {
   async function submitForm() {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/protected-url`,
+        "https://trim-url-gpxt.onrender.com/protected-url",
         { slugName, password },
         { withCredentials: true }
       );
