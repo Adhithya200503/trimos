@@ -15,7 +15,7 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, form, {
+      const res = await axios.post("https://trim-url-gpxt.onrender.com/auth/signup", form, {
         withCredentials: true,
       });
       alert(res.data.message);
