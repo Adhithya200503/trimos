@@ -25,8 +25,9 @@ const CreateShortUrl = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Login and Start to create Short Url");
+   
     if (!user) {
+      alert("Login and Start to create Short Url");
       navigate("/login");
     }
     setLoading(true);
