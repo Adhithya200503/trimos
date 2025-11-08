@@ -29,6 +29,7 @@ const CreateShortUrl = () => {
     if (!user) {
       alert("Login and Start to create Short Url");
       navigate("/login");
+      return ;
     }
     setLoading(true);
     setShortUrl("");
