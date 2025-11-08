@@ -108,7 +108,7 @@ const LinkStatsPDF = ({ linkData }) => {
     pdfMake.createPdf(docDefinition).download("link_analytics_report.pdf");
   };
 
-  return <button className="btn" onClick={generatePDF}>Download PDF</button>;
+  return <button className="btn bg-blue-500" onClick={generatePDF}>Download PDF</button>;
 };
 
 export default LinkStatsPDF;

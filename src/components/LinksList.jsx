@@ -94,7 +94,7 @@ const LinksList = ({
                 href={link.shortUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="link text-[#2A5BDA] no-underline"
+                className="link text-[#2A5BDA] dark:text-white no-underline"
               >
                 {link.shortUrl}
                 
@@ -120,7 +120,7 @@ const LinksList = ({
                 link.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="badge select-none rounded-none bg-gray-200"
+                    className="badge select-none rounded-sm bg-gray-200 dark:bg-blue-500"
                   >
                     {tag}
                   </span>
@@ -176,7 +176,7 @@ const LinksList = ({
                     size={14}
                     onClick={() => handleActiveToggle(link._id, link.slugName)}
                     className={`${
-                      link.isActive ? "text-red-700" : "text-black"
+                      link.isActive ? "text-red-700" : "text-black dark:text-white"
                     } cursor-pointer`}
                   />
                   {link.isActive ? "Active" : "Inactive"}

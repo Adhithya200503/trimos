@@ -215,7 +215,7 @@ const ShortLinksDashboard = () => {
               onChange={(e) => setTag(e.target.value)}
               className="input input-bordered w-full sm:w-1/2"
             />
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn bg-blue-500 rounded-sm ">
               Search
             </button>
           </form>
@@ -233,7 +233,7 @@ const ShortLinksDashboard = () => {
                 className="input input-bordered w-35"
               />
             </div>
-            <button type="submit" className="btn btn-secondary">
+            <button type="submit" className="btn bg-blue-500">
               Filter
             </button>
           </form>

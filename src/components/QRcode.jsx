@@ -60,7 +60,7 @@ const QRcode = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center w-full relative">
-      <Link className="absolute top-4 right-8 btn btn-primary" to="/qr-codes" >Saved QR codes</Link>
+      <Link className="absolute top-4 right-8 btn bg-blue-500" to="/qr-codes" >Saved QR codes</Link>
       <div className="flex flex-col w-md items-center gap-4">
         <span className="font-bold text-2xl">Create QR code</span>
         <input
@@ -74,7 +74,7 @@ const QRcode = () => {
         {error && <div className="text-sm text-red-500">{error}</div>}
 
         <button
-          className="btn btn-primary"
+          className="btn bg-blue-500 text-white"
           onClick={createQRCode}
           disabled={!url.trim()}
         >

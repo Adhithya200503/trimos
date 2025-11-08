@@ -260,7 +260,7 @@ const LinkEditPage = () => {
             linkData.tags.map((tag, index) => (
               <div
                 key={index}
-                className="badge select-none rounded-none bg-gray-200 gap-2 px-3 py-3 text-sm"
+                className="badge select-none rounded-sm bg-gray-200 dark:bg-blue-500 gap-2 px-3 py-3 text-sm"
               >
                 {tag}
                 <X
@@ -284,7 +284,7 @@ const LinkEditPage = () => {
 
           {/* Use details/summary for dropdown but position content absolutely so it doesn't push layout */}
           <details className="relative" ref={null}>
-            <summary className="flex items-center justify-between cursor-pointer w-full px-3 py-2 border rounded-md bg-white">
+            <summary className="flex items-center justify-between cursor-pointer w-full px-3 py-2 border rounded-md bg-white dark:bg-[#1D232A]">
               <span className="text-sm">
                 {selectedExistingTag.length > 0
                   ? `${selectedExistingTag.length} selected`
@@ -294,14 +294,14 @@ const LinkEditPage = () => {
             </summary>
 
             {/* Dropdown panel */}
-            <div className="absolute left-0 right-0 mt-2 z-50 bg-white border rounded-md shadow-md p-2">
+            <div className="absolute left-0 right-0 mt-2 z-50 bg-white dark:bg-[#1D232A] border rounded-md shadow-md p-2">
               <ul className="max-h-44 overflow-y-auto space-y-1">
                 {allTags
                   .filter((t) => !linkData.tags.includes(t)) // hide tags already attached to this link
                   .map((tag, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-between px-2 py-1 hover:bg-gray-50 rounded"
+                      className="flex items-center justify-between px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-800 rounded"
                     >
                       <label className="flex items-center gap-2 w-full cursor-pointer">
                         <input

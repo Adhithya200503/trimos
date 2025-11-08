@@ -173,7 +173,7 @@ const ListByTags = () => {
                     type="checkbox"
                     checked={selectedTags.includes(tag)}
                     onChange={() => handleTagToggle(tag)}
-                    className="checkbox checkbox-xs checkbox-primary"
+                    className="checkbox checkbox-xs text-blue-500 border border-blue-500"
                   />
                 </li>
               ))}
@@ -197,7 +197,7 @@ const ListByTags = () => {
                   type="checkbox"
                   checked={selectedTags.includes(tag)}
                   onChange={() => handleTagToggle(tag)}
-                  className="checkbox checkbox-xs checkbox-primary"
+                  className="checkbox checkbox-xs text-blue-500 border border-blue-500"
                 />
               </div>
             </li>

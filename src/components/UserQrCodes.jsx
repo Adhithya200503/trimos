@@ -86,10 +86,10 @@ const UserQrCodes = () => {
               className="w-[250px] sm:w-[300px] h-auto rounded-md mb-4"
             />
             <div className="w-[250px] sm:w-[300px] ">
-              <p className="text-sm text-gray-600 mb-2">
+              <p className="text-sm text-gray-600 dark:text-white mb-2">
                 <strong>Destination:</strong> {code.destinationUrl}
               </p>
-              <p className="text-sm text-gray-600 mb-2">
+              <p className="text-sm text-gray-400 mb-2">
                 <strong>Created At:</strong> {code.createdAt.slice(0,10)}
               </p>
             </div>
