@@ -30,11 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <TrimosLayout />
-      </ProtectedRoute>
-    ),
+    element: <TrimosLayout />,
     children: [
       {
         index: true,
@@ -42,31 +38,59 @@ const router = createBrowserRouter([
       },
       {
         path: "/user-profile",
-        element: <UserProfile />,
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/links",
-        element: <ShortLinksDashboard />,
+        element: (
+          <ProtectedRoute>
+            <ShortLinksDashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/link-details/:slugName",
-        element: <LinkDetails />,
+        element: (
+          <ProtectedRoute>
+            <LinkDetails />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/tags",
-        element: <ListByTags />,
+        element: (
+          <ProtectedRoute>
+            <ListByTags />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/qr-code",
-        element: <QRcode />,
+        element: (
+          <ProtectedRoute>
+            <QRcode />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/qr-codes",
-        element: <UserQrCodes />,
+        element: (
+          <ProtectedRoute>
+            <QRcode />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/analytics/:slugName",
-        element: <LinkAnalytics />,
+        element: (
+          <ProtectedRoute>
+            <LinkAnalytics />
+          </ProtectedRoute>
+        ),
       },
 
       {
