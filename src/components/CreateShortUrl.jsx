@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const CreateShortUrl = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +11,10 @@ const CreateShortUrl = () => {
     protected: false,
     password: "",
   });
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [shortUrl, setShortUrl] = useState("");
-
+  const { user } = useContext(AuthContext);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -23,9 +25,12 @@ const CreateShortUrl = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    alert("Login and Start to create Short Url");
+    if (!user) {
+      navigate("/login");
+    }
     setLoading(true);
     setShortUrl("");
-
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/create`,
@@ -40,7 +45,7 @@ const CreateShortUrl = () => {
         },
         { withCredentials: true }
       );
-      console.log("the hello :",res.data)
+      console.log("the hello :", res.data);
       setShortUrl(res.data?.data?.shortUrl);
     } catch (err) {
       alert(err.response?.data?.message || "Error creating URL");
@@ -54,7 +59,7 @@ const CreateShortUrl = () => {
       <div className="card w-[350px] sm:w-[500px]">
         <div className="card-body">
           <h2 className="card-title text-center text-2xl font-semibold mb-4">
-             Create Short URL
+            Create Short URL
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -138,7 +143,9 @@ const CreateShortUrl = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`btn bg-blue-500 rounded-sm w-full ${loading ? "loading" : ""}`}
+              className={`btn bg-blue-500 rounded-sm w-full ${
+                loading ? "loading" : ""
+              }`}
               disabled={loading}
             >
               {loading ? "Creating..." : "Create Short URL"}
