@@ -145,7 +145,7 @@ const CreateShortUrl = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`btn bg-blue-500 rounded-sm w-full ${
+              className={`btn bg-blue-500 text-white rounded-sm w-full ${
                 loading ? "loading" : ""
               }`}
               disabled={loading}

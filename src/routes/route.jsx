@@ -80,7 +80,7 @@ const router = createBrowserRouter([
         path: "/qr-codes",
         element: (
           <ProtectedRoute>
-            <QRcode />
+            <UserQrCodes />
           </ProtectedRoute>
         ),
       },

@@ -78,10 +78,11 @@ const LinksList = ({
                     <QrCode size={16} /> QR Code
                   </button>
                 </li>
+                <hr className="my-1 border-gray-600 opacity-30" />
                 <li>
                   <button
                     onClick={() => handleDelete(link.slugName)}
-                    className="flex items-center text-red-500 gap-2"
+                    className="flex items-center text-red-500 gap-2 "
                   >
                     <Trash size={16} /> Delete
                   </button>
@@ -97,7 +98,6 @@ const LinksList = ({
                 className="link text-[#2A5BDA] dark:text-white no-underline"
               >
                 {link.shortUrl}
-                
               </a>
               <CopyButton text={link.shortUrl} />
             </div>
@@ -176,7 +176,9 @@ const LinksList = ({
                     size={14}
                     onClick={() => handleActiveToggle(link._id, link.slugName)}
                     className={`${
-                      link.isActive ? "text-red-700" : "text-black dark:text-white"
+                      link.isActive
+                        ? "text-red-700"
+                        : "text-black dark:text-white"
                     } cursor-pointer`}
                   />
                   {link.isActive ? "Active" : "Inactive"}

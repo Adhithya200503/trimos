@@ -5,6 +5,7 @@ import { TagIcon, ChevronDown } from "lucide-react";
 import LinksList from "./LinksList";
 import QRCode from "qrcode";
 import { LuRefreshCw } from "react-icons/lu";
+import { IoPricetagOutline } from "react-icons/io5";
 
 const ListByTags = () => {
   const [tags, setTags] = useState([]);
@@ -147,7 +148,7 @@ const ListByTags = () => {
       <div className="block lg:hidden mb-4">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-md text-sm font-medium shadow-sm hover:bg-gray-200"
+          className="flex items-center justify-between w-full bg-gray-100 dark:bg-black px-4 py-2 rounded-md text-sm font-medium shadow-sm hover:bg-gray-200 dark:hover:bg-gray-200"
         >
           <span className="flex items-center gap-2">
             <TagIcon size={16} /> Filter by Tags
@@ -161,12 +162,50 @@ const ListByTags = () => {
         </button>
 
         {showDropdown && (
-          <div className="mt-2 bg-white border border-gray-300 rounded-md shadow-md p-3">
-            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {tags.map((tag, idx) => (
-                <li key={idx} className="flex justify-between items-center">
-                  <span className="flex items-center gap-1 text-xs sm:text-sm">
-                    <TagIcon size={13} className="text-gray-500" />
+          <div className="mt-2 bg-white dark:bg-black border border-gray-300 rounded-md shadow-md p-3">
+            {tags.length === 0 ? (
+              <div className="flex items-center justify-center py-6 text-sm text-gray-500">
+                <IoPricetagOutline className="mr-2" />
+                No tags found
+              </div>
+            ) : (
+              <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {tags.map((tag, idx) => (
+                  <li key={idx} className="flex justify-between items-center">
+                    <span className="flex items-center gap-1 text-xs sm:text-sm">
+                      <TagIcon size={13} className="text-gray-500" />
+                      {tag}
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={selectedTags.includes(tag)}
+                      onChange={() => handleTagToggle(tag)}
+                      className="checkbox checkbox-xs text-blue-500 border border-blue-500"
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Sidebar for large screens */}
+      <div className="hidden lg:block tag-filter w-[200px] border-r-2 border-gray-300 min-h-[80vh]">
+        {tags.length === 0 ? (
+          <div className="flex items-center justify-center min-h-[80vh] text-center">
+            <h1 className="flex gap-2 items-center text-sm opacity-80">
+              <IoPricetagOutline /> No tags found
+            </h1>
+          </div>
+        ) : (
+          <ul className="list">
+            <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Tags</li>
+            {tags.map((tag, idx) => (
+              <li className="list-row" key={idx}>
+                <div className="flex justify-between items-center w-[150px]">
+                  <span className="flex items-center gap-2 text-sm font-medium">
+                    <TagIcon size={15} />
                     {tag}
                   </span>
                   <input
@@ -175,34 +214,11 @@ const ListByTags = () => {
                     onChange={() => handleTagToggle(tag)}
                     className="checkbox checkbox-xs text-blue-500 border border-blue-500"
                   />
-                </li>
-              ))}
-            </ul>
-          </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
-      </div>
-
-      {/* Sidebar for large screens */}
-      <div className="hidden lg:block tag-filter w-[200px] border-r-2 border-gray-300 min-h-[80vh]">
-        <ul className="list">
-          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">Tags</li>
-          {tags.map((tag, idx) => (
-            <li className="list-row" key={idx}>
-              <div className="flex justify-between items-center w-[150px]">
-                <span className="flex items-center gap-2 text-sm font-medium">
-                  <TagIcon size={15} />
-                  {tag}
-                </span>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => handleTagToggle(tag)}
-                  className="checkbox checkbox-xs text-blue-500 border border-blue-500"
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
 
       {/* URL list */}

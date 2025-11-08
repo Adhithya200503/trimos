@@ -60,7 +60,7 @@ const QRcode = () => {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center w-full relative">
-      <Link className="absolute top-4 right-8 btn bg-blue-500" to="/qr-codes" >Saved QR codes</Link>
+      <Link className="absolute top-4 right-8 btn bg-blue-500 text-white" to="/qr-codes" >Saved QR codes</Link>
       <div className="flex flex-col w-md items-center gap-4">
         <span className="font-bold text-2xl">Create QR code</span>
         <input
