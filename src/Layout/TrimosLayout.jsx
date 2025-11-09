@@ -143,7 +143,7 @@ const TrimosLayout = () => {
               }
             >
               <QrCode size={20} />
-              Qr
+              QR Code
             </NavLink>
           </li>
         </ul>
