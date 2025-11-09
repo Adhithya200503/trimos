@@ -110,7 +110,8 @@ const LinksList = ({
                 rel="noreferrer"
                 className="link"
               >
-                {link.destinationUrl}
+                <span className="sm:hidden">{link.destinationUrl.length <= 30 ?link.destinationUrl:link.destinationUrl.slice(0,30)+"..."}</span>
+                <span className="hidden md:block">{link.destinationUrl.length <= 30 ?link.destinationUrl:link.destinationUrl.slice(0,80)+"..."}</span>
               </a>
             </p>
 

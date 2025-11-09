@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
 import { TagIcon, ChevronDown } from "lucide-react";
-import LinksList from "./LinksList";
-import QRCode from "qrcode";
-import { LuRefreshCw } from "react-icons/lu";
 import { IoPricetagOutline } from "react-icons/io5";
+import QRCode from "qrcode";
+import LinksList from "./LinksList";
+import Loader from "./ui/Loader";
 
 const ListByTags = () => {
   const [tags, setTags] = useState([]);
@@ -14,6 +14,8 @@ const ListByTags = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeLoading, setActiveLoading] = useState(null);
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(null);
+  const [loadingTags, setLoadingTags] = useState(true);
+  const [loadingUrls, setLoadingUrls] = useState(false);
   const { user } = useContext(AuthContext);
 
   const handleTagToggle = (tag) => {
@@ -24,13 +26,23 @@ const ListByTags = () => {
 
   useEffect(() => {
     async function getMatchedUrls() {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/matched-urls`,
-        { tagsList: selectedTags },
-        { withCredentials: true }
-      );
-      setUrls(res.data.urls);
+      setLoadingUrls(true);
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/matched-urls`,
+          { tagsList: selectedTags },
+          { withCredentials: true }
+        );
+        setUrls(res.data.urls);
+      } catch (error) {
+        console.error("Error fetching matched URLs:", error);
+      } finally {
+        setTimeout(()=>{
+          setLoadingUrls(false);
+        },1000)
+      }
     }
+
     getMatchedUrls();
   }, [selectedTags]);
 
@@ -39,9 +51,7 @@ const ListByTags = () => {
     try {
       await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/delete/${slugName}`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       setUrls((prev) => prev.filter((link) => link.slugName !== slugName));
     } catch {
@@ -52,7 +62,6 @@ const ListByTags = () => {
   const handleQRCode = async (shortUrl, slugName) => {
     try {
       const qrCodeDataUrl = await QRCode.toDataURL(shortUrl);
-
       const link = document.createElement("a");
       link.href = qrCodeDataUrl;
       link.download = `${slugName || "qrcode"}.png`;
@@ -63,18 +72,15 @@ const ListByTags = () => {
       console.error("Error generating QR code:", error);
     }
   };
+
   const handleActiveToggle = async (linkId, slugName) => {
-    console.log("triggered handle active field");
     try {
       setActiveLoading(linkId);
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${slugName}`
       );
-      console.log("previous", res.data);
       const prevIsActiveValue = res.data.result.isActive;
-      console.log("previous_val", prevIsActiveValue);
 
-      // Toggle value
       const postresponse = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkId}`,
         { isActive: !prevIsActiveValue },
@@ -84,6 +90,7 @@ const ListByTags = () => {
       if (postresponse.data.result) {
         alert(`Link status: ${prevIsActiveValue} → ${!prevIsActiveValue}`);
       }
+
       setUrls((prevUrls) =>
         prevUrls.map((link) =>
           link.slugName === slugName
@@ -91,7 +98,6 @@ const ListByTags = () => {
             : link
         )
       );
-      console.log("after toggling", postresponse.data);
     } catch (error) {
       console.error(error);
       alert("Error toggling active status: " + error.message);
@@ -101,6 +107,7 @@ const ListByTags = () => {
       }, 2000);
     }
   };
+
   const handleProtectedToggle = async (linkId, slugName) => {
     try {
       setPasswordChangeLoading(linkId);
@@ -134,11 +141,21 @@ const ListByTags = () => {
 
   useEffect(() => {
     async function getTags() {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tags`, {
-        withCredentials: true,
-      });
-      setTags(res.data.tags);
+      setLoadingTags(true);
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tags`, {
+          withCredentials: true,
+        });
+        setTags(res.data.tags);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      } finally {
+        setTimeout(()=>{
+          setLoadingTags(false);
+        },1000)
+      }
     }
+
     getTags();
   }, [user]);
 
@@ -163,7 +180,9 @@ const ListByTags = () => {
 
         {showDropdown && (
           <div className="mt-2 bg-white dark:bg-black border border-gray-300 rounded-md shadow-md p-3">
-            {tags.length === 0 ? (
+            { true ? (
+              <Loader />
+            ) : tags.length === 0 ? (
               <div className="flex items-center justify-center py-6 text-sm text-gray-500">
                 <IoPricetagOutline className="mr-2" />
                 No tags found
@@ -192,7 +211,9 @@ const ListByTags = () => {
 
       {/* Sidebar for large screens */}
       <div className="hidden lg:block tag-filter w-[200px] border-r-2 border-gray-300 min-h-[80vh]">
-        {tags.length === 0 ? (
+        {loadingTags ? (
+           <Loader />
+        ) : tags.length === 0 ? (
           <div className="flex items-center justify-center min-h-[80vh] text-center">
             <h1 className="flex gap-2 items-center text-sm opacity-80">
               <IoPricetagOutline /> No tags found
@@ -223,7 +244,9 @@ const ListByTags = () => {
 
       {/* URL list */}
       <div className="flex-1 flex flex-col items-center min-h-[60vh] lg:min-h-[80vh]">
-        {urls.length !== 0 ? (
+        { loadingUrls ? (
+          <Loader />
+        ) : urls.length !== 0 ? (
           <div className="w-full sm:w-[90%] lg:w-[800px]">
             <LinksList
               links={urls}
@@ -248,3 +271,5 @@ const ListByTags = () => {
 };
 
 export default ListByTags;
+
+

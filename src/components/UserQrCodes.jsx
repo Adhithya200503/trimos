@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Download, Share2, Trash2, Loader2 } from "lucide-react";
+import Loader from "./ui/Loader";
 
 const UserQrCodes = () => {
   const [qrCodes, setQrCodes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
 
   const fetchQrCodes = async () => {
+    setLoading(true)
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/my-qrcodes`,
         { withCredentials: true }
       );
       setQrCodes(response.data.data);
-      setLoading(false);
+     
     } catch (error) {
       console.error("Error fetching QR codes:", error);
-      setLoading(false);
+     
+    }finally{
+      setTimeout(()=>{
+        setLoading(false)
+      },1000)
     }
   };
 
@@ -67,9 +73,7 @@ const UserQrCodes = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <Loader2 className="animate-spin h-6 w-6 text-gray-500" /> Loading...
-      </div>
+      <Loader />
     );
   }
 

@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import LinksList from "./LinksList";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Loader from "./ui/Loader";
 
 const ShortLinksDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -32,7 +33,9 @@ const ShortLinksDashboard = () => {
       } catch (err) {
         setMessage(err.response?.data?.message || "Failed to fetch URLs");
       } finally {
-        setLoading(false);
+        setTimeout(()=>{
+          setLoading(false);
+        },1000)
       }
     };
     fetchUserLinks();
@@ -59,7 +62,9 @@ const ShortLinksDashboard = () => {
       setLinks([]);
       setMessage(err.response?.data?.message || "No results found");
     } finally {
-      setLoading(false);
+      setTimeout(()=>{
+        setLoading(false);
+      },1000)
     }
   };
 
@@ -85,7 +90,9 @@ const ShortLinksDashboard = () => {
       setLinks([]);
       setMessage(err.response?.data?.message || "No results found");
     } finally {
-      setLoading(false);
+      setTimeout(()=>{
+        setLoading(false);
+      },1000)
     }
   };
 
@@ -240,10 +247,8 @@ const ShortLinksDashboard = () => {
         </div>
 
         {/* Loading */}
-        {loading && (
-          <div className="flex justify-center items-center py-10">
-            <span className="loading loading-spinner loading-lg text-primary"></span>
-          </div>
+        { loading && (
+          <Loader />
         )}
 
         {/* Message */}
