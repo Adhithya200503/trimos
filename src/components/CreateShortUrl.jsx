@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
-import ImageUrlCutter from "../assets/image.png"
+import ImageUrlCutter from "../assets/image.png";
 const CreateShortUrl = () => {
   const [formData, setFormData] = useState({
     destinationUrl: "",
@@ -10,6 +10,7 @@ const CreateShortUrl = () => {
     tags: "",
     protected: false,
     password: "",
+    domain: "",
     utm_source: "",
     utm_medium: "",
     utm_campaign: "",
@@ -68,6 +69,7 @@ const CreateShortUrl = () => {
           tags: formData.tags
             ? formData.tags.split(",").map((tag) => tag.trim())
             : [],
+          domain: formData.domain || "trim-url-gpxt.onrender.com"
         },
         { withCredentials: true }
       );
@@ -86,7 +88,11 @@ const CreateShortUrl = () => {
       <div className="card w-[350px] sm:w-[600px]">
         <div className="card-body">
           <h2 className="card-title text-center text-2xl sm:text-3xl font-semibold mb-4 flex items-center gap-6">
-           <span >Create Short URL</span> <img className="hidden sm:block w-[100px] h-[50px]" src={ImageUrlCutter} />
+            <span>Create Short URL</span>{" "}
+            <img
+              className="hidden sm:block w-[100px] h-[50px]"
+              src={ImageUrlCutter}
+            />
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -156,17 +162,46 @@ const CreateShortUrl = () => {
             </div>
 
             {/* Custom Slug */}
-            <div>
-              <label className="label">
-                <span className="label-text font-semibold">Custom Slug</span>
-              </label>
-              <input
-                type="text"
-                name="slugName"
-                placeholder="e.g., my-link"
-                className="input input-bordered w-full"
-                onChange={handleChange}
-              />
+            <div className="flex flex-col sm:flex-row w-full gap-4">
+              {/* Domain Field */}
+              <div className="flex-1">
+                <label className="label">
+                  <span className="label-text font-semibold">Domain</span>
+                </label>
+                <select
+                  name="domain"
+                  value={formData.domain}
+                  onChange={handleChange}
+                  className="select select-bordered select-neutral w-full"
+                >
+                  <option value="trim-url-gpxt.onrender.com">
+                    trim-url-gpxt.onrender.com (Default)
+                  </option>
+                  {user?.customDomain?.length > 0 ? (
+                    user.customDomain.map((domain, idx) => (
+                      <option key={idx} value={domain.name}>
+                        {domain.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>No Custom Domain</option>
+                  )}
+                </select>
+              </div>
+
+              {/* Custom Slug Field */}
+              <div className="flex-1">
+                <label className="label">
+                  <span className="label-text font-semibold">Custom Slug</span>
+                </label>
+                <input
+                  type="text"
+                  name="slugName"
+                  placeholder="e.g., my-link"
+                  className="input input-bordered w-full"
+                  onChange={handleChange}
+                />
+              </div>
             </div>
 
             {/* Tags */}

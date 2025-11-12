@@ -1,15 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Mail, Calendar, Globe, ProjectorIcon, Lock } from "lucide-react";
+import {
+  Mail,
+  Calendar,
+  Globe,
+  ProjectorIcon,
+  Lock,
+  Trash2,
+} from "lucide-react";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
 import { FaCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const { user } = useContext(AuthContext);
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const [userData, setUserData] = useState(null);
   const [domainName, setDomainName] = useState("");
   const [loading, setLoading] = useState(false);
   const [domains, setDomains] = useState([]);
-
+  const navigate = useNavigate();
   // ✅ Load user data
   useEffect(() => {
     if (user) {
@@ -18,7 +27,6 @@ const UserProfile = () => {
     }
   }, [user]);
 
-  // ✅ Fetch user domains from backend
   const fetchUserDomains = async () => {
     try {
       const res = await axios.get(
@@ -31,7 +39,11 @@ const UserProfile = () => {
     }
   };
 
-  // ✅ Add new domain
+  const showAlert = (type, message) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert({ type: "", message: "" }), 4000);
+  };
+
   const handleAddDomain = async (e) => {
     e.preventDefault();
     if (!domainName.trim()) return;
@@ -45,8 +57,13 @@ const UserProfile = () => {
       );
       setDomains(res.data.domains);
       setDomainName("");
+      console.log(res.data.domains)
+      showAlert("success", "Domain added successfully!");
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to add domain");
+      showAlert(
+        "error",
+        error.response?.data?.message || "Failed to add domain"
+      );
     } finally {
       setLoading(false);
     }
@@ -66,6 +83,15 @@ const UserProfile = () => {
         {/* User Info Card */}
         <div className="card w-full sm:w-[45%] bg-base-100 shadow-lg border border-base-300">
           <div className="card-body">
+            {alert.message && (
+              <div
+                className={`alert ${
+                  alert.type === "success" ? "alert-success" : "alert-error"
+                } shadow-lg mb-3`}
+              >
+                <span>{alert.message}</span>
+              </div>
+            )}
             {/* Profile Section */}
             <div className="flex flex-col items-center text-center space-y-3">
               <div className="avatar placeholder">
@@ -142,52 +168,86 @@ const UserProfile = () => {
                 <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
                   Total URLs:
                 </span>
-                <span className="font-semibold text-gray-700">500</span>
+                <span className="font-semibold text-gray-500">500</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <FaCircle size={10} className="text-red-500" />
-                  <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
+                  <span
+                    className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer"
+                    onClick={() => {
+                      navigate("/filter/active");
+                    }}
+                  >
                     Active URLs:
                   </span>
                 </div>
-                <span className="font-semibold">400</span>
+                <span className="font-semibold text-gray-500">400</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <FaCircle size={10} className="text-gray-400" />
-                  <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
+                  <span
+                    className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer"
+                    onClick={() => {
+                      navigate("/filter/inactive");
+                    }}
+                  >
                     Deactive URLs:
                   </span>
                 </div>
-                <span className="font-semibold">120</span>
+                <span className="font-semibold text-gray-500">120</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <Lock size={14} className="text-blue-500" />
-                  <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
+                  <span
+                    className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer"
+                    onClick={() => {
+                      navigate("/filter/protected");
+                    }}
+                  >
                     Protected URLs:
                   </span>
                 </div>
-                <span className="font-semibold">100</span>
+                <span className="font-semibold text-gray-500">100</span>
               </div>
             </div>
           </div>
 
- 
           <div className="p-6 bg-white rounded-md shadow-md border border-base-300">
             <h2 className="text-xl  mb-2 border-b border-gray-200 pb-2">
-              Custom Domains
+              Custom Domains{" "}
+              <span className="text-sm text-gray-500 capitalize">
+                (total custom domaims {domains.length})
+              </span>
             </h2>
             {domains.length > 0 ? (
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-3 space-y-2 h-[250px] overflow-y-scroll">
                 {domains.map((domain, index) => (
                   <li
-                    key={index}
-                    className="flex items-center gap-2 p-2 rounded-md hover:bg-base-200 transition"
+                    key={domain._id || index}
+                    className="flex items-center gap-2 p-2 rounded-md"
                   >
                     <Globe className="w-4 h-4 text-primary" />
-                    <span>{domain}</span>
+
+                    {/* ✅ Safely show domain name */}
+                    <div className="flex flex-col">
+                      <span className="font-medium">{domain.name}</span>
+                      <span
+                        className={`text-xs ${
+                          domain.verified ? "text-green-500" : "text-yellow-500"
+                        }`}
+                      >
+                        {domain.verified ? "Verified" : "Pending Verification"}
+                      </span>
+                    </div>
+
+                    <Trash2
+                      className="ml-auto text-red-500 cursor-pointer"
+                      size={16}
+                    
+                    />
                   </li>
                 ))}
               </ul>

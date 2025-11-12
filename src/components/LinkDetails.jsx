@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Plus, X, Copy, TagIcon } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
 
-
 const LinkEditPage = () => {
   const { slugName } = useParams();
   const navigate = useNavigate();
@@ -12,6 +11,7 @@ const LinkEditPage = () => {
   const [linkData, setLinkData] = useState({
     destinationUrl: "",
     slugName: "",
+    domain: "",
     tags: [],
     protected: false,
     password: "",
@@ -19,6 +19,7 @@ const LinkEditPage = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [domains, setDomains] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [newTag, setNewTag] = useState("");
@@ -64,7 +65,22 @@ const LinkEditPage = () => {
     }
     fetchAllTags();
   }, []);
-
+  useEffect(() => {
+    async function fetchDomains() {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/domains`,
+          {
+            withCredentials: true,
+          }
+        );
+        setDomains(res.data.domains || []);
+      } catch (error) {
+        console.error("Failed to fetch domains:", error.message);
+      }
+    }
+    fetchDomains();
+  }, []);
   const handleChange = (e) => {
     setLinkData({ ...linkData, [e.target.name]: e.target.value });
   };
@@ -102,6 +118,7 @@ const LinkEditPage = () => {
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkData._id}`,
         {
           destinationUrl: linkData.destinationUrl,
+          domain: linkData.domain ,
           slugName: linkData.slugName,
           tags: linkData.tags,
           protected: linkData.protected || false,
@@ -176,6 +193,42 @@ const LinkEditPage = () => {
           onChange={handleChange}
           className="input input-bordered w-full"
         />
+      </div>
+      {/* Domain (Editable) */}
+      {/* Domain Selection */}
+      <div className="form-control mb-4">
+        <label className="label">Custom Domain</label>
+        <select
+          name="domain"
+          value={linkData.domain || import.meta.env.VITE_BACKEND_URL}
+          onChange={handleChange}
+          className="select select-bordered w-full"
+        >
+          {/* If current domain isn’t in the list, show it first */}
+          {linkData.domain &&
+            !domains.some((d) => d.name === linkData.domain) &&
+            linkData.domain !== import.meta.env.VITE_BACKEND_URL && (
+              <option value={linkData.domain}>
+                {linkData.domain} (Current)
+              </option>
+            )}
+
+          {/* Default backend domain */}
+          <option value={"trim-url-gpxt.onrender.com"}>
+            {"trim-url-gpxt.onrender.com"} (Default)
+          </option>
+
+          {/* User’s saved custom domains */}
+          {domains.length > 0 ? (
+            domains.map((d, index) => (
+              <option key={index} value={d.name}>
+                {d.name}
+              </option>
+            ))
+          ) : (
+            <option disabled>No custom domains found</option>
+          )}
+        </select>
       </div>
 
       {/* Short URL */}

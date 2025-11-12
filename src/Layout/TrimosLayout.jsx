@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { Link2, Plus, QrCode, Tags } from "lucide-react";
+import { RiArrowDownWideLine } from "react-icons/ri";
 
 const TrimosLayout = () => {
   const { user, logout } = useContext(AuthContext);
@@ -43,48 +44,33 @@ const TrimosLayout = () => {
           </div>
 
           {/* Profile or Auth Buttons */}
-          <div className="flex-none">
-            {user ? (
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="bg-primary text-primary-content rounded-full w-24 flex items-center justify-center">
-                    <span className="text-sm font-bold">
-                      {user.username.charAt(0)}
-                    </span>
-                  </div>
+          <div className="w-full flex justify-end items-center px-6 py-3">
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+               
+                <div className="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center">
+                  {user?.username?.charAt(0).toUpperCase()}
                 </div>
-                <ul
-                  tabIndex={0}
-                  className="mt-3 z-1 p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52"
-                >
-                  <li>
-                    <NavLink to="/user-profile">Profile</NavLink>
-                  </li>
-                  <li>
-                    <button onClick={logout}>Logout</button>
-                  </li>
-                </ul>
+                 <span className="hidden sm:flex items-center gap-2 text-md font-semibold">
+                  {user?.username}<RiArrowDownWideLine size={14} className="text-black" />
+                </span>
               </div>
-            ) : (
-              <div className="flex gap-2">
-                <button
-                  className="btn btn-outline btn-primary"
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => navigate("/signup")}
-                >
-                  Sign Up
-                </button>
-              </div>
-            )}
+              <ul
+                tabIndex={0}
+                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52"
+              >
+                <li>
+                  <NavLink to="/user-profile">Profile</NavLink>
+                </li>
+                <li>
+                  <button onClick={logout}>Logout</button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 

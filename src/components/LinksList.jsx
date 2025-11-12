@@ -70,6 +70,9 @@ const LinksList = ({
                     Analytics
                   </NavLink>
                 </li>
+                <li className="block sm:hidden">
+                  <CopyButton text={link.shortUrl} />
+                </li>
                 <li>
                   <button
                     onClick={() => handleQRCode(link.shortUrl, link.slugName)}
@@ -99,7 +102,9 @@ const LinksList = ({
               >
                 {link.shortUrl}
               </a>
-              <CopyButton text={link.shortUrl} />
+              <div className="hidden sm:block">
+                <CopyButton  text={link.shortUrl} />
+              </div>
             </div>
 
             <p className="text-sm text-gray-500 truncate flex items-center gap-2">
@@ -162,9 +167,9 @@ const LinksList = ({
                 </span>
               )}
 
-              <span className="flex gap-1.5">
+              <span className="flex w-12 gap-1.5">
                 <EyeIcon size={14} />
-                {link.clicks}
+                {Intl.NumberFormat("en", { notation: "compact" }).format(Number(link.clicks))}
               </span>
               {activeLoading == link._id ? (
                 <span className="flex gap-1.5 cursor-pointer select-none ">

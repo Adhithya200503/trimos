@@ -14,6 +14,7 @@ import UserQrCodes from "../components/UserQrCodes.jsx";
 import ProtectedRoute from "../components/ProtectedRouted.jsx";
 import LinkAnalytics from "../components/LinkAnalytics.jsx";
 import LinkInactive from "../components/LinkInActive.jsx";
+import FilterLinksPage from "../components/FilterLinksPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
             <LinkAnalytics />
           </ProtectedRoute>
         ),
+      },
+      {
+        path:"/filter/:sort",
+        element:<FilterLinksPage />
       },
 
       {

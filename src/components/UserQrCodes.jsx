@@ -8,21 +8,19 @@ const UserQrCodes = () => {
   const [loading, setLoading] = useState();
 
   const fetchQrCodes = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/my-qrcodes`,
         { withCredentials: true }
       );
       setQrCodes(response.data.data);
-     
     } catch (error) {
       console.error("Error fetching QR codes:", error);
-     
-    }finally{
-      setTimeout(()=>{
-        setLoading(false)
-      },1000)
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   };
 
@@ -46,58 +44,68 @@ const UserQrCodes = () => {
   };
 
   const shareQrCode = async (qrUrl) => {
-  try {
-    // Convert base64 data URL to Blob
-    const response = await fetch(qrUrl);
-    const blob = await response.blob();
-    const file = new File([blob], "qrcode.png", { type: "image/png" });
+    try {
+      // Convert base64 data URL to Blob
+      const response = await fetch(qrUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "qrcode.png", { type: "image/png" });
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        title: "QR Code",
-        text: "Scan this QR code",
-        files: [file],
-      });
-    } else {
-      alert("Sharing is not supported on this device/browser.");
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: "QR Code",
+          text: "Scan this QR code",
+          files: [file],
+        });
+      } else {
+        alert("Sharing is not supported on this device/browser.");
+      }
+    } catch (error) {
+      console.error("Error sharing QR code:", error);
     }
-  } catch (error) {
-    console.error("Error sharing QR code:", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     fetchQrCodes();
   }, []);
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
       {qrCodes.length === 0 ? (
-        <p>No QR codes found. Create one to get started!</p>
+        <p className="text-center text-gray-600 dark:text-white">
+          No QR codes found. Create one to get started!
+        </p>
       ) : (
         qrCodes.map((code, index) => (
-          <div key={code._id} className=" rounded-lg p-4">
+          <div
+            key={code._id}
+            className="bg-white dark:bg-gray-800 shadow-md rounded-sm p-5 flex flex-col items-center justify-between w-full max-w-xs mx-auto"
+          >
+        
             <img
               src={code.qrUrl}
               alt={`QR Code ${index + 1}`}
-              className="w-[250px] sm:w-[300px] h-auto rounded-md mb-4"
+              className="w-56 h-56 rounded-lg mb-4 object-contain"
             />
-            <div className="w-[250px] sm:w-[300px] ">
-              <p className="text-sm text-gray-600 dark:text-white mb-2">
-                <strong>Destination:</strong> {code.destinationUrl}
+
+            {/* Info */}
+            <div className="w-full text-center mb-4">
+              <p className="text-sm text-gray-700 dark:text-gray-200 truncate">
+                <strong>Destination:</strong>{" "}
+                <span className="break-all text-blue-500">
+                  {code.destinationUrl}
+                </span>
               </p>
-              <p className="text-sm text-gray-400 mb-2">
-                <strong>Created At:</strong> {code.createdAt.slice(0,10)}
+              <p className="text-xs text-gray-500 mt-1">
+                <strong>Created At:</strong> {code.createdAt.slice(0, 10)}
               </p>
             </div>
-            <div className="flex justify-between w-[250px] sm:w-[300px]">
+
+            {/* Buttons */}
+            <div className="flex justify-between w-full">
               <button
                 onClick={() => shareQrCode(code.qrUrl)}
                 className="btn btn-sm btn-outline flex items-center gap-1"

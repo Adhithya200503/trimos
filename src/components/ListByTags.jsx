@@ -162,7 +162,7 @@ const ListByTags = () => {
   return (
     <div className="flex flex-col lg:flex-row p-4 lg:p-6 gap-4 w-full lg:w-[80vw] mx-auto">
       {/* Mobile Dropdown */}
-      <div className="block lg:hidden mb-4">
+      <div className="block xl:hidden mb-4">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
           className="flex items-center justify-between w-full bg-gray-100 dark:bg-black px-4 py-2 rounded-md text-sm font-medium shadow-sm hover:bg-gray-200 dark:hover:bg-gray-200"
@@ -180,7 +180,7 @@ const ListByTags = () => {
 
         {showDropdown && (
           <div className="mt-2 bg-white dark:bg-black border border-gray-300 rounded-md shadow-md p-3">
-            { true ? (
+            { loadingTags ? (
               <Loader />
             ) : tags.length === 0 ? (
               <div className="flex items-center justify-center py-6 text-sm text-gray-500">
