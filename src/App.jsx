@@ -12,9 +12,7 @@ function App() {
   const [urls, setUrls] = useState([]);
 
   return (
-    <AuthProvider>
       <RouterProvider router={router} />
-    </AuthProvider>
   );
 }
 
