@@ -1,12 +1,17 @@
 import { useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function GoogleButton() {
+  const navigate = useNavigate();
+
   useEffect(() => {
+  
     window.google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       callback: handleResponse,
     });
+
     window.google.accounts.id.renderButton(
       document.getElementById("googleButton"),
       { theme: "outline", size: "large" }
@@ -15,14 +20,19 @@ export default function GoogleButton() {
 
   const handleResponse = async (response) => {
     try {
-      const res = await axios.post(`https://trim-url-gpxt.onrender.com/auth/google`, {
-        tokenId: response.credential
-      });
+      const res = await axios.post(
+        `https://trim-url-gpxt.onrender.com/auth/google`,
+        { tokenId: response.credential },
+        { withCredentials: true } 
+      );
 
-      localStorage.setItem("token", res.data.token);
+   
       console.log("Google login successful", res.data.userData);
+
+      
+      navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error("Google login failed", err);
     }
   };
 
