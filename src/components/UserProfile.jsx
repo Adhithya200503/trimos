@@ -6,6 +6,7 @@ import {
   ProjectorIcon,
   Lock,
   Trash2,
+  Unlock,
 } from "lucide-react";
 import { AuthContext } from "../context/authContext";
 import axios from "axios";
@@ -16,6 +17,13 @@ const UserProfile = () => {
   const [alert, setAlert] = useState({ type: "", message: "" });
   const [userData, setUserData] = useState(null);
   const [domainName, setDomainName] = useState("");
+  const [linkStatusCount, setLinkStatusCount] = useState({
+    active: 0,
+    inactive: 0,
+    protected: 0,
+    notprotected: 0,
+    totalLinks:0
+  });
   const [loading, setLoading] = useState(false);
   const [domains, setDomains] = useState([]);
   const navigate = useNavigate();
@@ -25,6 +33,40 @@ const UserProfile = () => {
       setUserData(user);
       fetchUserDomains();
     }
+  }, [user]);
+
+  useEffect(() => {
+    const fetchFilteredLinks = async () => {
+      if (!user) return;
+
+      const filterOptions = ["active", "inactive", "protected","notprotected"];
+      const counts = {};
+
+      try {
+        for (const filter of filterOptions) {
+          const res = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/filter/${filter}`,
+            { withCredentials: true }
+          );
+          counts[filter] = res.data.results.length;
+        }
+
+        // Add totalLinks by summing all counts
+        setLinkStatusCount({
+          ...counts,
+          totalLinks: Object.values(counts).reduce((acc, num) => acc + num, 0),
+        });
+
+        console.log("Counts with total:", {
+          ...counts,
+          totalLinks: Object.values(counts).reduce((acc, num) => acc + num, 0),
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFilteredLinks();
   }, [user]);
 
   const fetchUserDomains = async () => {
@@ -57,7 +99,7 @@ const UserProfile = () => {
       );
       setDomains(res.data.domains);
       setDomainName("");
-      console.log(res.data.domains)
+      console.log(res.data.domains);
       showAlert("success", "Domain added successfully!");
     } catch (error) {
       showAlert(
@@ -168,7 +210,7 @@ const UserProfile = () => {
                 <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
                   Total URLs:
                 </span>
-                <span className="font-semibold text-gray-500">500</span>
+                <span className="font-semibold text-gray-500">{linkStatusCount.totalLinks}</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -182,7 +224,7 @@ const UserProfile = () => {
                     Active URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">400</span>
+                <span className="font-semibold text-gray-500">{linkStatusCount.active}</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -196,7 +238,7 @@ const UserProfile = () => {
                     Deactive URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">120</span>
+                <span className="font-semibold text-gray-500">{linkStatusCount.inactive}</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -210,7 +252,21 @@ const UserProfile = () => {
                     Protected URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">100</span>
+                <span className="font-semibold text-gray-500">{linkStatusCount.protected}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Unlock size={14} className="text-red-500" />
+                  <span
+                    className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer"
+                    onClick={() => {
+                      navigate("/filter/notprotected");
+                    }}
+                  >
+                    Not Protected URLs:
+                  </span>
+                </div>
+                <span className="font-semibold text-gray-500">{linkStatusCount.notprotected}</span>
               </div>
             </div>
           </div>
@@ -246,7 +302,6 @@ const UserProfile = () => {
                     <Trash2
                       className="ml-auto text-red-500 cursor-pointer"
                       size={16}
-                    
                     />
                   </li>
                 ))}

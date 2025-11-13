@@ -3,6 +3,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import GoogleButton from "./ui/GoogleButton";
 
 const LoginPage = () => {
   const {setUser} = useContext(AuthContext);
@@ -79,12 +80,14 @@ const LoginPage = () => {
           </form>
 
           <div className="text-center mt-3 text-sm">
-            <p>
+             <GoogleButton></GoogleButton>
+            <p className="mt-2">
               Don’t have an account?{" "}
               <a href="/signup" className="link link-primary">
                 Sign Up
               </a>
             </p>
+           
           </div>
         </div>
       </div>

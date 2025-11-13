@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { Link2, Plus, QrCode, Tags } from "lucide-react";
+import { Link2, LogOut, Plus, QrCode, Tags, User } from "lucide-react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 
 const TrimosLayout = () => {
@@ -10,10 +10,7 @@ const TrimosLayout = () => {
 
   return (
     <div className="drawer lg:drawer-open">
-      {/* Drawer toggle checkbox */}
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-
-      {/* Drawer content (main page area) */}
       <div className="drawer-content flex flex-col">
         {/* Top navbar */}
         <div className="navbar bg-base-200 shadow-md px-4">
@@ -45,7 +42,7 @@ const TrimosLayout = () => {
 
           {/* Profile or Auth Buttons */}
           <div className="w-full flex justify-end items-center px-6 py-3">
-            <div className="dropdown dropdown-end">
+            {user?<div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
                 role="button"
@@ -61,16 +58,17 @@ const TrimosLayout = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52"
+                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-sm w-52"
               >
                 <li>
-                  <NavLink to="/user-profile">Profile</NavLink>
+                  <NavLink to="/user-profile"><span className="flex items-center gap-2"><User size={14} />Profile</span></NavLink>
                 </li>
+                 <hr className="my-1 border-gray-600 opacity-30" />
                 <li>
-                  <button onClick={logout}>Logout</button>
+                  <button onClick={logout}><span className="flex items-center gap-2 text-red-500"><LogOut size={14} />Logout</span></button>
                 </li>
               </ul>
-            </div>
+            </div>:<span className="flex gap-x-2"><NavLink to={"/login"} className="btn bg-blue-500 text-white">Login</NavLink><NavLink to={"/signup"} className="btn bg-red-500 text-white">Signup</NavLink></span>}
           </div>
         </div>
 
