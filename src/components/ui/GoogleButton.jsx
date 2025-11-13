@@ -22,7 +22,7 @@ export default function GoogleButton() {
   const handleResponse = async (response) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/google`,
+        "https://trim-url-gpxt.onrender.com/auth/google",
         { tokenId: response.credential },
         { withCredentials: true }
       );
