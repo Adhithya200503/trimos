@@ -35,5 +35,5 @@ export default function GoogleButton() {
     }
   };
 
-  return <div id="googleButton"></div>;
+  return <div id="googleButton" className="w-full"></div>;
 }
