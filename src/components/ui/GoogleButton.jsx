@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const { setUser } = useContext(AuthContext);
+
 export default function GoogleButton() {
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
   
     window.google.accounts.id.initialize({
@@ -28,7 +30,7 @@ export default function GoogleButton() {
 
    
       console.log("Google login successful", res.data.userData);
-
+      setUser(res.data.userData);
       
       navigate("/");
     } catch (err) {
