@@ -3,13 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 
-const { setUser } = useContext(AuthContext);
-
 export default function GoogleButton() {
   const navigate = useNavigate();
- 
+  const { setUser } = useContext(AuthContext); // ✅ moved inside component
+
   useEffect(() => {
-  
     window.google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       callback: handleResponse,
@@ -24,15 +22,13 @@ export default function GoogleButton() {
   const handleResponse = async (response) => {
     try {
       const res = await axios.post(
-        `https://trim-url-gpxt.onrender.com/auth/google`,
+        `${import.meta.env.VITE_BACKEND_URL}/auth/google`,
         { tokenId: response.credential },
-        { withCredentials: true } 
+        { withCredentials: true }
       );
 
-   
       console.log("Google login successful", res.data.userData);
       setUser(res.data.userData);
-      
       navigate("/");
     } catch (err) {
       console.error("Google login failed", err);
