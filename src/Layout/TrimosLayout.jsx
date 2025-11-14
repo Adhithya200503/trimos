@@ -53,7 +53,7 @@ const TrimosLayout = () => {
                   {user?.username?.charAt(0).toUpperCase()}
                 </div>
                  <span className="hidden sm:flex items-center gap-2 text-md font-semibold">
-                  {user?.username}<RiArrowDownWideLine size={14} className="text-black" />
+                  {user?.username}<RiArrowDownWideLine size={14} className="text-black dark:text-white" />
                 </span>
               </div>
               <ul
