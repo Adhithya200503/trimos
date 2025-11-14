@@ -3,9 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 
+
 export default function GoogleButton() {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext); // ✅ moved inside component
+  const { setUser } = useContext(AuthContext);
 
   useEffect(() => {
     window.google.accounts.id.initialize({
@@ -15,7 +16,11 @@ export default function GoogleButton() {
 
     window.google.accounts.id.renderButton(
       document.getElementById("googleButton"),
-      { theme: "outline", size: "large" }
+      {
+        theme: "outline",
+        size: "large",
+        width: "100%",      // 👈 force full width
+      }
     );
   }, []);
 
@@ -27,7 +32,6 @@ export default function GoogleButton() {
         { withCredentials: true }
       );
 
-      console.log("Google login successful", res.data.userData);
       setUser(res.data.userData);
       navigate("/");
     } catch (err) {
@@ -35,5 +39,13 @@ export default function GoogleButton() {
     }
   };
 
-  return <div id="googleButton" className="w-full"></div>;
+  // 👇 FIX: MATCH HEIGHT & WIDTH
+  return (
+    <div className="w-full">
+      <div
+        id="googleButton"
+        className="w-full h-12 flex items-center justify-center"
+      />
+    </div>
+  );
 }
