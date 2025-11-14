@@ -1,7 +1,8 @@
 import { useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../context/authContext";
+
 
 export default function GoogleButton() {
   const navigate = useNavigate();
