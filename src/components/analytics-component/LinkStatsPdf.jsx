@@ -1,6 +1,7 @@
 import React from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts"; 
+import { GoDownload } from "react-icons/go";
 
 
 const LinkStatsPDF = ({ linkData }) => {
@@ -108,7 +109,7 @@ const LinkStatsPDF = ({ linkData }) => {
     pdfMake.createPdf(docDefinition).download("link_analytics_report.pdf");
   };
 
-  return <button className="btn bg-blue-500" onClick={generatePDF}>Download PDF</button>;
+  return <button className="btn bg-blue-500 text-white" onClick={generatePDF}><GoDownload />Download PDF</button>;
 };
 
 export default LinkStatsPDF;

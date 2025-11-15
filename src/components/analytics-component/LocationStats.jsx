@@ -61,7 +61,7 @@ const RegionStatsTable = ({ regionStats }) => {
   }
 
   return (
-    <div>
+    <div className="bg-white p-8 rounded-md">
       <div className="flex flex-col md:flex-row gap-3 mb-4">
         <input
           type="text"

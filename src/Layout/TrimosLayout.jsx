@@ -3,6 +3,9 @@ import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { Link2, LogOut, Plus, QrCode, Tags, User } from "lucide-react";
 import { RiArrowDownWideLine } from "react-icons/ri";
+import { TbCaretUpDown } from "react-icons/tb";
+import { BsGlobe2 } from "react-icons/bs";
+import { SiSimpleanalytics } from "react-icons/si";
 
 const TrimosLayout = () => {
   const { user, logout } = useContext(AuthContext);
@@ -42,33 +45,54 @@ const TrimosLayout = () => {
 
           {/* Profile or Auth Buttons */}
           <div className="w-full flex justify-end items-center px-6 py-3">
-            {user?<div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="flex items-center gap-2 cursor-pointer"
-              >
-               
-                <div className="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center">
-                  {user?.username?.charAt(0).toUpperCase()}
+            {user ? (
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <div className="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center">
+                    {user?.username?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden sm:flex items-center gap-2 text-md font-semibold">
+                    {user?.username}
+                    <TbCaretUpDown size={20} className="text-black dark:text-black"/>
+                  </span>
                 </div>
-                 <span className="hidden sm:flex items-center gap-2 text-md font-semibold">
-                  {user?.username}<RiArrowDownWideLine size={14} className="text-black dark:text-white" />
-                </span>
+                <ul
+                  tabIndex={0}
+                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-sm w-52"
+                >
+                  <li>
+                    <NavLink to="/user-profile">
+                      <span className="flex items-center gap-2">
+                        <User size={14} />
+                        Profile
+                      </span>
+                    </NavLink>
+                  </li>
+                  <hr className="my-1 border-gray-600 opacity-30" />
+                  <li>
+                    <button onClick={logout}>
+                      <span className="flex items-center gap-2 text-red-500">
+                        <LogOut size={14} />
+                        Logout
+                      </span>
+                    </button>
+                  </li>
+                </ul>
               </div>
-              <ul
-                tabIndex={0}
-                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-sm w-52"
-              >
-                <li>
-                  <NavLink to="/user-profile"><span className="flex items-center gap-2"><User size={14} />Profile</span></NavLink>
-                </li>
-                 <hr className="my-1 border-gray-600 opacity-30" />
-                <li>
-                  <button onClick={logout}><span className="flex items-center gap-2 text-red-500"><LogOut size={14} />Logout</span></button>
-                </li>
-              </ul>
-            </div>:<span className="flex gap-x-2"><NavLink to={"/login"} className="btn bg-blue-500 text-white">Login</NavLink><NavLink to={"/signup"} className="btn bg-red-500 text-white">Signup</NavLink></span>}
+            ) : (
+              <span className="flex gap-x-2">
+                <NavLink to={"/login"} className="btn bg-blue-500 text-white">
+                  Login
+                </NavLink>
+                <NavLink to={"/signup"} className="btn bg-red-500 text-white">
+                  Signup
+                </NavLink>
+              </span>
+            )}
           </div>
         </div>
 
@@ -79,18 +103,20 @@ const TrimosLayout = () => {
       </div>
 
       {/* Sidebar (drawer side) */}
-      <div className="drawer-side">
+      <div className="drawer-side ">
         <label
           htmlFor="my-drawer"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu pt-[70px] p-4 w-80 lg:w-[250px] min-h-full bg-base-200 text-base-content gap-y-4">
+        <ul className="menu pt-[70px] p-4 w-80 lg:w-[250px] min-h-full bg-gray-800 text-white text-base-content gap-y-4">
           <li>
             <NavLink
               to="/"
               className={({ isActive }) =>
-                isActive ? "active font-semibold" : ""
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
               }
             >
               <Plus size={20} />
@@ -101,7 +127,9 @@ const TrimosLayout = () => {
             <NavLink
               to="/links"
               className={({ isActive }) =>
-                isActive ? "active font-semibold" : ""
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
               }
             >
               <Link2 size={20} />
@@ -112,7 +140,9 @@ const TrimosLayout = () => {
             <NavLink
               to="/tags"
               className={({ isActive }) =>
-                isActive ? "active font-semibold" : ""
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
               }
             >
               <Tags size={20} />
@@ -123,11 +153,39 @@ const TrimosLayout = () => {
             <NavLink
               to="/qr-code"
               className={({ isActive }) =>
-                isActive ? "active font-semibold" : ""
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
               }
             >
               <QrCode size={20} />
               QR Code
+            </NavLink>
+          </li>
+           <li>
+            <NavLink
+              to="/analytics"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
+              }
+            >
+             <SiSimpleanalytics />
+             Analytics
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/user-profile"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
+              }
+            >
+             <BsGlobe2 size={20} />
+             Domains
             </NavLink>
           </li>
         </ul>

@@ -42,7 +42,6 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center px-6">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-16 max-w-7xl w-full">
-        {/* LEFT: Login Card */}
         <div className="card w-full max-w-sm shadow-xl bg-base-100 p-4">
           <div className="card-body">
             <h2 className="text-2xl font-bold text-center">Login</h2>

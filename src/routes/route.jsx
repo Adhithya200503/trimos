@@ -15,6 +15,7 @@ import ProtectedRoute from "../components/ProtectedRouted.jsx";
 import LinkAnalytics from "../components/LinkAnalytics.jsx";
 import LinkInactive from "../components/LinkInActive.jsx";
 import FilterLinksPage from "../components/FilterLinksPage.jsx";
+import AnalyticsPage from "../components/AnalyticsPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
       {
         path:"/filter/:sort",
         element:<FilterLinksPage />
+      },
+      {
+        path:"/analytics",
+        element:<AnalyticsPage />
       },
 
       {

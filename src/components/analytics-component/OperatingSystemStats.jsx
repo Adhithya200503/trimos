@@ -49,7 +49,7 @@ const OperatingSystemStats = ({OsStats}) => {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row  justify-around">
+    <div className="flex flex-col sm:flex-row  justify-around bg-white p-4 rounded-md overflow-x-auto">
       <div className="overflow-x-auto w-sm sm:w-md">
         <div className="flex mb-2">
           <select
