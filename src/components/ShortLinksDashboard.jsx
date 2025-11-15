@@ -6,6 +6,8 @@ import LinksList from "./LinksList";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Loader from "./ui/Loader";
+import toast from "react-hot-toast";
+import NotFound from "../assets/notfound.svg";
 
 const ShortLinksDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -33,9 +35,9 @@ const ShortLinksDashboard = () => {
       } catch (err) {
         setMessage(err.response?.data?.message || "Failed to fetch URLs");
       } finally {
-        setTimeout(()=>{
+        setTimeout(() => {
           setLoading(false);
-        },1000)
+        }, 1000);
       }
     };
     fetchUserLinks();
@@ -62,9 +64,9 @@ const ShortLinksDashboard = () => {
       setLinks([]);
       setMessage(err.response?.data?.message || "No results found");
     } finally {
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoading(false);
-      },1000)
+      }, 1000);
     }
   };
 
@@ -90,9 +92,9 @@ const ShortLinksDashboard = () => {
       setLinks([]);
       setMessage(err.response?.data?.message || "No results found");
     } finally {
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoading(false);
-      },1000)
+      }, 1000);
     }
   };
 
@@ -107,6 +109,7 @@ const ShortLinksDashboard = () => {
         }
       );
       setLinks((prev) => prev.filter((link) => link.slugName !== slugName));
+      toast.success(`Url with ${slugName} deleted successfully`);
     } catch {
       alert("Failed to delete the link");
     }
@@ -169,21 +172,18 @@ const ShortLinksDashboard = () => {
     try {
       setPasswordChangeLoading(linkId);
 
-     
       const res = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${slugName}`
       );
 
       const prevProtectedValue = res.data.result.protected;
 
-    
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkId}`,
         { protected: !prevProtectedValue },
         { withCredentials: true }
       );
 
-      
       setLinks((prevLinks) =>
         prevLinks.map((link) =>
           link.slugName === slugName
@@ -222,7 +222,10 @@ const ShortLinksDashboard = () => {
               onChange={(e) => setTag(e.target.value)}
               className="input input-bordered w-full sm:w-1/2"
             />
-            <button type="submit" className="btn bg-blue-500 text-white rounded-sm ">
+            <button
+              type="submit"
+              className="btn bg-blue-500 text-white rounded-sm "
+            >
               Search
             </button>
           </form>
@@ -247,13 +250,20 @@ const ShortLinksDashboard = () => {
         </div>
 
         {/* Loading */}
-        { loading && (
-          <Loader />
-        )}
+        {loading && <Loader />}
 
         {/* Message */}
         {!loading && message && (
-          <div className="alert alert-warning text-center">{message}</div>
+          <div className="text-center rounded">
+            {message === "No short links found" ? (
+              <div className="text-center py-10 text-gray-500 flex flex-col justify-center items-center w-full gap-4">
+                <img src={NotFound} alt="No short links" className="w-[300px] h-[300px]" />
+                You haven’t created any short links yet.
+              </div>
+            ) : (
+              <span className="alert alert-warning rounded-none">{message}</span>
+            )}
+          </div>
         )}
 
         {/* Card Layout */}
@@ -274,6 +284,7 @@ const ShortLinksDashboard = () => {
         {/* Empty State */}
         {!loading && links.length === 0 && !message && (
           <div className="text-center py-10 text-gray-500">
+            <img src={NotFound}></img>
             You haven’t created any short links yet.
           </div>
         )}

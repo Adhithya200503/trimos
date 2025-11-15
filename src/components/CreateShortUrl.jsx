@@ -3,6 +3,8 @@ import axios from "axios";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import ImageUrlCutter from "../assets/image.png";
+import toast from "react-hot-toast";
+import { FaSpinner } from "react-icons/fa";
 const CreateShortUrl = () => {
   const [formData, setFormData] = useState({
     destinationUrl: "",
@@ -69,15 +71,15 @@ const CreateShortUrl = () => {
           tags: formData.tags
             ? formData.tags.split(",").map((tag) => tag.trim())
             : [],
-          domain: formData.domain || "trim-url-gpxt.onrender.com"
+          domain: formData.domain || "trim-url-gpxt.onrender.com",
         },
         { withCredentials: true }
       );
 
-      console.log("Response:", res.data);
       setShortUrl(res.data?.data?.shortUrl);
+      toast.success("Short Url Created Successfully");
     } catch (err) {
-      alert(err.response?.data?.message || "Error creating URL");
+      toast.error(err.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -260,12 +262,19 @@ const CreateShortUrl = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`btn bg-blue-500 text-white rounded-sm w-full ${
-                loading ? "loading" : ""
-              }`}
               disabled={loading}
+              className={`w-full bg-blue-500 text-white py-2 rounded-sm flex items-center justify-center ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
+              }`}
             >
-              {loading ? "Creating..." : "Create Short URL"}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <FaSpinner className="animate-spin text-white" />
+                  <span>Creating...</span>
+                </div>
+              ) : (
+                "Create Short URL"
+              )}
             </button>
           </form>
 

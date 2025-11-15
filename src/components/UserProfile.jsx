@@ -22,7 +22,7 @@ const UserProfile = () => {
     inactive: 0,
     protected: 0,
     notprotected: 0,
-    totalLinks:0
+    totalLinks: 0,
   });
   const [loading, setLoading] = useState(false);
   const [domains, setDomains] = useState([]);
@@ -39,7 +39,7 @@ const UserProfile = () => {
     const fetchFilteredLinks = async () => {
       if (!user) return;
 
-      const filterOptions = ["active", "inactive", "protected","notprotected"];
+      const filterOptions = ["active", "inactive", "protected", "notprotected"];
       const counts = {};
 
       try {
@@ -50,11 +50,20 @@ const UserProfile = () => {
           );
           counts[filter] = res.data.results.length;
         }
+        let totalLinks = 0;
+        try {
+          const res = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/total-short-urls`,
+            { withCredentials: true }
+          );
 
-        // Add totalLinks by summing all counts
+          totalLinks = res.data.count;
+        } catch (error) {
+          window.alert(error.message);
+        }
         setLinkStatusCount({
           ...counts,
-          totalLinks: Object.values(counts).reduce((acc, num) => acc + num, 0),
+          totalLinks:totalLinks,
         });
 
         console.log("Counts with total:", {
@@ -108,6 +117,19 @@ const UserProfile = () => {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDomainDeletion = async (domainName) => {
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/domain/${domainName}`
+      );
+      const updatedDomainList = res.data.results;
+      setDomains(updatedDomainList);
+      window.alert(res.data.message);
+    } catch (error) {
+      window.alert(error.message);
     }
   };
 
@@ -210,7 +232,9 @@ const UserProfile = () => {
                 <span className="hover:underline decoration-gray-300  underline-offset-4 cursor-pointer">
                   Total URLs:
                 </span>
-                <span className="font-semibold text-gray-500">{linkStatusCount.totalLinks}</span>
+                <span className="font-semibold text-gray-500">
+                  {linkStatusCount.totalLinks}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -224,7 +248,9 @@ const UserProfile = () => {
                     Active URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">{linkStatusCount.active}</span>
+                <span className="font-semibold text-gray-500">
+                  {linkStatusCount.active}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -238,7 +264,9 @@ const UserProfile = () => {
                     Deactive URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">{linkStatusCount.inactive}</span>
+                <span className="font-semibold text-gray-500">
+                  {linkStatusCount.inactive}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -252,7 +280,9 @@ const UserProfile = () => {
                     Protected URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">{linkStatusCount.protected}</span>
+                <span className="font-semibold text-gray-500">
+                  {linkStatusCount.protected}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -266,7 +296,9 @@ const UserProfile = () => {
                     Not Protected URLs:
                   </span>
                 </div>
-                <span className="font-semibold text-gray-500">{linkStatusCount.notprotected}</span>
+                <span className="font-semibold text-gray-500">
+                  {linkStatusCount.notprotected}
+                </span>
               </div>
             </div>
           </div>
@@ -302,6 +334,7 @@ const UserProfile = () => {
                     <Trash2
                       className="ml-auto text-red-500 cursor-pointer"
                       size={16}
+                      onClick={() => handleDomainDeletion(domain.name)}
                     />
                   </li>
                 ))}

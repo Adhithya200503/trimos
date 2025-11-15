@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/authContext";
 export default function GoogleButton() {
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false); // 👈 loader state
 
   useEffect(() => {
     window.google.accounts.id.initialize({
@@ -19,12 +20,13 @@ export default function GoogleButton() {
       {
         theme: "outline",
         size: "large",
-        width: "100%",      // 👈 force full width
+        width: "100%",
       }
     );
   }, []);
 
   const handleResponse = async (response) => {
+    setLoading(true); // 👈 start loader
     try {
       const res = await axios.post(
         "https://trim-url-gpxt.onrender.com/auth/google",
@@ -36,16 +38,23 @@ export default function GoogleButton() {
       navigate("/");
     } catch (err) {
       console.error("Google login failed", err);
+    } finally {
+      setLoading(false); // 👈 stop loader
     }
   };
 
-  // 👇 FIX: MATCH HEIGHT & WIDTH
   return (
     <div className="w-full">
-      <div
-        id="googleButton"
-        className="w-full h-12 flex items-center justify-center"
-      />
+      {loading ? (
+        <div className="flex items-center justify-center h-12">
+          <div className="loader border-4 border-t-blue-500 border-gray-300 rounded-full w-6 h-6 animate-spin" />
+        </div>
+      ) : (
+        <div
+          id="googleButton"
+          className="w-full h-12 flex items-center justify-center"
+        />
+      )}
     </div>
   );
 }
