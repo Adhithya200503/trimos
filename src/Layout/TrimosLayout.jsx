@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { Link2, LogOut, Plus, QrCode, Tags, User } from "lucide-react";
+import { Link2, LogOut, Plus, QrCode, Settings, Settings2, Tags, User } from "lucide-react";
 import { RiArrowDownWideLine } from "react-icons/ri";
 import { TbCaretUpDown } from "react-icons/tb";
 import { BsGlobe2 } from "react-icons/bs";
@@ -186,6 +186,19 @@ const TrimosLayout = () => {
             >
              <BsGlobe2 size={20} />
              Domains
+            </NavLink>
+          </li>
+           <li className="mt-auto">
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded ${
+                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
+                }`
+              }
+            >
+            <Settings />
+             Settings
             </NavLink>
           </li>
         </ul>

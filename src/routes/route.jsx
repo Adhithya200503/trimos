@@ -16,6 +16,7 @@ import LinkAnalytics from "../components/LinkAnalytics.jsx";
 import LinkInactive from "../components/LinkInActive.jsx";
 import FilterLinksPage from "../components/FilterLinksPage.jsx";
 import AnalyticsPage from "../components/AnalyticsPage.jsx";
+import Setting from "../components/Setting.jsx";
 
 const router = createBrowserRouter([
   {
@@ -95,12 +96,16 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path:"/filter/:sort",
-        element:<FilterLinksPage />
+        path: "/filter/:sort",
+        element: <FilterLinksPage />,
       },
       {
-        path:"/analytics",
-        element:<AnalyticsPage />
+        path: "/analytics",
+        element: <AnalyticsPage />,
+      },
+      {
+        path: "/settings",
+        element: <Setting />,
       },
 
       {

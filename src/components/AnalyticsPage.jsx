@@ -36,6 +36,7 @@ const AnalyticsPage = () => {
   const handleSelect = (e) => {
     const selectedUrl = urls.filter((url) => e.target.value === url.slugName);
     setCurrentAnalyticsPage(selectedUrl[0]);
+    console.log(selectedUrl[0]);
   };
   return (
     <div>
@@ -59,9 +60,13 @@ const AnalyticsPage = () => {
           <li className="p-4 pb-2 text-xs opacity-60 tracking-wide flex items-center gap-2.5">
             <div></div>
             <IoMdLink size={20} />
-            URL 
-            
-            <NavLink to={`/link-details/${currentAnalyticsPage.slugName}`} ><span className="flex items-center gap-2.5 hover:text-blue-800 dark:hover:text-white"><CiEdit size={20}/>Edit</span></NavLink>
+            URL
+            <NavLink to={`/link-details/${currentAnalyticsPage.slugName}`}>
+              <span className="flex items-center gap-2.5 hover:text-blue-800 dark:hover:text-white">
+                <CiEdit size={20} />
+                Edit
+              </span>
+            </NavLink>
           </li>
 
           <li className="list-row">
@@ -121,28 +126,34 @@ const AnalyticsPage = () => {
         </ul>
       </div>
 
-      <div className="relative mt-4">
-        <div className="flex justify-end">
-          <LinkStatsPDF linkData={currentAnalyticsPage} />
+      {currentAnalyticsPage.clicks === 0 ? (
+        <p>Not a Single click occurred</p>
+      ) : (
+        <div className="relative mt-4">
+          <div className="flex justify-end">
+            <LinkStatsPDF linkData={currentAnalyticsPage} />
+          </div>
+          <div className="flex flex-col gap-12">
+            <p className="text-2xl mb-4 flex gap-4 items-center">
+              <CiLocationOn size={24} />
+              Region Wise Analytics
+            </p>
+            <RegionStatsTable regionStats={currentAnalyticsPage.stats} />
+            <p className="text-2xl mb-4 flex gap-4 items-center">
+              <CgBrowser size={24} />
+              Browser Analytics
+            </p>
+            <BrowserStatsTable
+              browserStats={currentAnalyticsPage.browserStats}
+            />
+            <p className="text-2xl mb-4 flex gap-4 items-center">
+              <FaMicrosoft size={24} />
+              OS Analytics
+            </p>
+            <OperatingSystemStats OsStats={currentAnalyticsPage.osStats} />
+          </div>
         </div>
-        <div className="flex flex-col gap-12">
-          <p className="text-2xl mb-4 flex gap-4 items-center">
-            <CiLocationOn size={24} />
-            Region Wise Analytics
-          </p>
-          <RegionStatsTable regionStats={currentAnalyticsPage.stats} />
-          <p className="text-2xl mb-4 flex gap-4 items-center">
-            <CgBrowser size={24} />
-            Browser Analytics
-          </p>
-          <BrowserStatsTable browserStats={currentAnalyticsPage.browserStats} />
-          <p className="text-2xl mb-4 flex gap-4 items-center">
-            <FaMicrosoft size={24} />
-            OS Analytics
-          </p>
-          <OperatingSystemStats OsStats={currentAnalyticsPage.osStats} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
