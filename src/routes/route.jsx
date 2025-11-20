@@ -3,13 +3,12 @@ import Login from "../components/Login.jsx";
 import Signup from "../components/SignUp.jsx";
 import UserProfile from "../components/UserProfile.jsx";
 import TrimosLayout from "../Layout/TrimosLayout.jsx";
-import CreateShortUrl from "../components/CreateShortUrl.jsx";
 import ShortLinksDashboard from "../components/ShortLinksDashboard.jsx";
 import LinkDetails from "../components/LinkDetails.jsx";
 import NotFoundPage from "../components/NotFoundPage.jsx";
 import ListByTags from "../components/ListByTags.jsx";
 import LinkProtection from "../components/LinkProtection.jsx";
-import QRcode from "../components/QRcode.jsx";
+ 
 import UserQrCodes from "../components/UserQrCodes.jsx";
 import ProtectedRoute from "../components/ProtectedRouted.jsx";
 import LinkAnalytics from "../components/LinkAnalytics.jsx";
@@ -17,6 +16,8 @@ import LinkInactive from "../components/LinkInActive.jsx";
 import FilterLinksPage from "../components/FilterLinksPage.jsx";
 import AnalyticsPage from "../components/AnalyticsPage.jsx";
 import Setting from "../components/Setting.jsx";
+import ShortUrlAndQR from "../components/ShortUrlAndQR.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <CreateShortUrl />,
+        element: <ShortUrlAndQR />
       },
       {
         path: "/user-profile",
@@ -71,14 +72,7 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "/qr-code",
-        element: (
-          <ProtectedRoute>
-            <QRcode />
-          </ProtectedRoute>
-        ),
-      },
+  
       {
         path: "/qr-codes",
         element: (

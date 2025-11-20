@@ -12,7 +12,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [theme , setTheme] = useState("LightMode");
 
     axios.defaults.withCredentials = true;
 
@@ -30,6 +30,16 @@ export const AuthProvider = ({ children }) => {
         };
 
         fetchUser();
+
+        const getTheme = ()=>{
+            const themeMode = localStorage.getItem("theme");
+            if(!theme){
+                localStorage.setItem("theme","LightMode");
+            }
+            setTheme(themeMode);
+        }
+
+        getTheme();
     }, []);
     const logout = async () => {
         try {
@@ -40,8 +50,14 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
         }
     };
+
+    const toggleTheme = ()=>{
+        localStorage.setItem("theme",theme=="LightMode"?"DarkMode":"LightMode")
+        setTheme(theme=="LightMode"?"DarkMode":"LightMode");
+        
+    }
     return (
-        <AuthContext.Provider value={{ setUser, user, loading, logout }}>
+        <AuthContext.Provider value={{ setUser, user, loading, logout , toggleTheme , theme}}>
             {children}
         </AuthContext.Provider>
     )

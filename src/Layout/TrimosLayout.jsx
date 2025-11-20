@@ -149,19 +149,7 @@ const TrimosLayout = () => {
               Tags
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/qr-code"
-              className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded ${
-                  isActive ? "bg-blue-500 font-semibold" : "hover:bg-gray-700"
-                }`
-              }
-            >
-              <QrCode size={20} />
-              QR Code
-            </NavLink>
-          </li>
+       
            <li>
             <NavLink
               to="/analytics"
