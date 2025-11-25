@@ -3,16 +3,213 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Plus, X, Copy, TagIcon } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
-
+const countries = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Antigua and Barbuda",
+  "Argentina",
+  "Armenia",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia and Herzegovina",
+  "Botswana",
+  "Brazil",
+  "Brunei",
+  "Bulgaria",
+  "Burkina Faso",
+  "Burundi",
+  "Cabo Verde",
+  "Cambodia",
+  "Cameroon",
+  "Canada",
+  "Central African Republic",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Comoros",
+  "Congo, Democratic Republic of the",
+  "Congo, Republic of the",
+  "Costa Rica",
+  "Croatia",
+  "Cuba",
+  "Cyprus",
+  "Czech Republic",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Eswatini",
+  "Ethiopia",
+  "Fiji",
+  "Finland",
+  "France",
+  "Gabon",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Greece",
+  "Grenada",
+  "Guatemala",
+  "Guinea",
+  "Guinea-Bissau",
+  "Guyana",
+  "Haiti",
+  "Honduras",
+  "Hungary",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Jordan",
+  "Kazakhstan",
+  "Kenya",
+  "Kiribati",
+  "Korea, North",
+  "Korea, South",
+  "Kuwait",
+  "Kyrgyzstan",
+  "Laos",
+  "Latvia",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Liechtenstein",
+  "Lithuania",
+  "Luxembourg",
+  "Madagascar",
+  "Malawi",
+  "Malaysia",
+  "Maldives",
+  "Mali",
+  "Malta",
+  "Marshall Islands",
+  "Mauritania",
+  "Mauritius",
+  "Mexico",
+  "Micronesia",
+  "Moldova",
+  "Monaco",
+  "Mongolia",
+  "Montenegro",
+  "Morocco",
+  "Mozambique",
+  "Myanmar",
+  "Namibia",
+  "Nauru",
+  "Nepal",
+  "Netherlands",
+  "New Zealand",
+  "Nicaragua",
+  "Niger",
+  "Nigeria",
+  "North Macedonia",
+  "Norway",
+  "Oman",
+  "Pakistan",
+  "Palau",
+  "Panama",
+  "Papua New Guinea",
+  "Paraguay",
+  "Peru",
+  "Philippines",
+  "Poland",
+  "Portugal",
+  "Qatar",
+  "Romania",
+  "Russia",
+  "Rwanda",
+  "Saint Kitts and Nevis",
+  "Saint Lucia",
+  "Saint Vincent and the Grenadines",
+  "Samoa",
+  "San Marino",
+  "Sao Tome and Principe",
+  "Saudi Arabia",
+  "Senegal",
+  "Serbia",
+  "Seychelles",
+  "Sierra Leone",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "Solomon Islands",
+  "Somalia",
+  "South Africa",
+  "South Sudan",
+  "Spain",
+  "Sri Lanka",
+  "Sudan",
+  "Suriname",
+  "Sweden",
+  "Switzerland",
+  "Syria",
+  "Taiwan",
+  "Tajikistan",
+  "Tanzania",
+  "Thailand",
+  "Timor-Leste",
+  "Togo",
+  "Tonga",
+  "Trinidad and Tobago",
+  "Tunisia",
+  "Turkey",
+  "Turkmenistan",
+  "Tuvalu",
+  "Uganda",
+  "Ukraine",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+  "Uruguay",
+  "Uzbekistan",
+  "Vanuatu",
+  "Vatican City",
+  "Venezuela",
+  "Vietnam",
+  "Yemen",
+  "Zambia",
+  "Zimbabwe",
+];
 const LinkEditPage = () => {
   const { slugName } = useParams();
   const navigate = useNavigate();
+  const [blockedCountries, setBlockedCountries] = useState([]);
 
   const [linkData, setLinkData] = useState({
     destinationUrl: "",
     slugName: "",
     domain: "",
     tags: [],
+    blockedCountries: [],
     protected: false,
     password: "",
     showPassword: false,
@@ -39,6 +236,7 @@ const LinkEditPage = () => {
           ...res.data.result,
           showPassword: false,
         }));
+        setBlockedCountries(res.data.result.blockedCountries || []);
       } catch (err) {
         setErrorMsg(err.response?.data?.message || "Failed to fetch link data");
       } finally {
@@ -118,11 +316,12 @@ const LinkEditPage = () => {
         `${import.meta.env.VITE_BACKEND_URL}/short-url/${linkData._id}`,
         {
           destinationUrl: linkData.destinationUrl,
-          domain: linkData.domain ,
+          domain: linkData.domain,
           slugName: linkData.slugName,
           tags: linkData.tags,
           protected: linkData.protected || false,
           password: linkData.protected ? linkData.password : null,
+          blockedCountries:blockedCountries
         },
         { withCredentials: true }
       );
@@ -153,6 +352,26 @@ const LinkEditPage = () => {
       </div>
     );
   }
+
+  const handleBlockedCountryChange = (e,country) => {
+    const filteredList = blockedCountries.filter(
+      (countryName) => countryName !== country
+    );
+
+    setBlockedCountries(filteredList);
+  };
+
+  const handleCountrySelect = (e) => {
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    if (checked) {
+      setBlockedCountries((prev) => [...prev, value]);
+    } else {
+      setBlockedCountries((prev) => prev.filter((c) => c !== value));
+    }
+  };
+
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6">
@@ -300,7 +519,39 @@ const LinkEditPage = () => {
           </div>
         )}
       </div>
-
+      <div className="blocked-countries-section flex flex-col py-3 gap-3">
+        <span className="label">Blocked Countries ({blockedCountries.length}) </span>
+        <div>
+          {blockedCountries.length === 0 ? <span className="text-sm">No Blocked Countries Found</span>:blockedCountries?.map((country, idx) => {
+            return (
+              <div
+                key={idx}
+                className="badge select-none rounded-sm bg-gray-200 dark:bg-blue-500 gap-2 px-3 py-3 text-sm"
+              >
+                {country}
+                <X
+                  size={14}
+                  className="cursor-pointer hover:text-error"
+                  onClick={(e) => handleBlockedCountryChange(e , country)}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="max-h-40 overflow-y-auto border-none p-3 rounded-lg ">
+          {countries.map((country, idx) => (
+            <label key={idx} className="flex items-center gap-x-2 mb-1">
+              <input
+                type="checkbox"
+                value={country}
+                checked={blockedCountries.includes(country)}
+                onChange={(e) => handleCountrySelect(e)}
+              />
+              <span>{country}</span>
+            </label>
+          ))}
+        </div>
+      </div>
       {/* Tags Section */}
       <div className="form-control mb-4">
         <label className="label flex items-center gap-2">

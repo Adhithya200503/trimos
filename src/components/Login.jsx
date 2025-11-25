@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import GoogleButton from "./ui/GoogleButton";
 import UrlShortnerImage from "../assets/urlShortnerImage.svg";
 import { FaSpinner } from "react-icons/fa";
+import toast from "react-hot-toast";
 const LoginPage = () => {
   const { setUser } = useContext(AuthContext);
   const [form, setForm] = useState({
@@ -29,13 +30,14 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
-      alert(res.data.message);
+      toast.success(res.data.message);
       setUser(res.data.userData);
+      navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
-      navigate("/");
+      
     }
   };
 

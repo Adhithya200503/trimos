@@ -8,6 +8,202 @@ import { FaSpinner } from "react-icons/fa";
 import QRCode from "qrcode";
 import { QrCode as QRCOde } from "lucide-react";
 import { FiLink2 } from "react-icons/fi";
+const countries = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Antigua and Barbuda",
+  "Argentina",
+  "Armenia",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia and Herzegovina",
+  "Botswana",
+  "Brazil",
+  "Brunei",
+  "Bulgaria",
+  "Burkina Faso",
+  "Burundi",
+  "Cabo Verde",
+  "Cambodia",
+  "Cameroon",
+  "Canada",
+  "Central African Republic",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Comoros",
+  "Congo, Democratic Republic of the",
+  "Congo, Republic of the",
+  "Costa Rica",
+  "Croatia",
+  "Cuba",
+  "Cyprus",
+  "Czech Republic",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Eswatini",
+  "Ethiopia",
+  "Fiji",
+  "Finland",
+  "France",
+  "Gabon",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Greece",
+  "Grenada",
+  "Guatemala",
+  "Guinea",
+  "Guinea-Bissau",
+  "Guyana",
+  "Haiti",
+  "Honduras",
+  "Hungary",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Jordan",
+  "Kazakhstan",
+  "Kenya",
+  "Kiribati",
+  "Korea, North",
+  "Korea, South",
+  "Kuwait",
+  "Kyrgyzstan",
+  "Laos",
+  "Latvia",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Liechtenstein",
+  "Lithuania",
+  "Luxembourg",
+  "Madagascar",
+  "Malawi",
+  "Malaysia",
+  "Maldives",
+  "Mali",
+  "Malta",
+  "Marshall Islands",
+  "Mauritania",
+  "Mauritius",
+  "Mexico",
+  "Micronesia",
+  "Moldova",
+  "Monaco",
+  "Mongolia",
+  "Montenegro",
+  "Morocco",
+  "Mozambique",
+  "Myanmar",
+  "Namibia",
+  "Nauru",
+  "Nepal",
+  "Netherlands",
+  "New Zealand",
+  "Nicaragua",
+  "Niger",
+  "Nigeria",
+  "North Macedonia",
+  "Norway",
+  "Oman",
+  "Pakistan",
+  "Palau",
+  "Panama",
+  "Papua New Guinea",
+  "Paraguay",
+  "Peru",
+  "Philippines",
+  "Poland",
+  "Portugal",
+  "Qatar",
+  "Romania",
+  "Russia",
+  "Rwanda",
+  "Saint Kitts and Nevis",
+  "Saint Lucia",
+  "Saint Vincent and the Grenadines",
+  "Samoa",
+  "San Marino",
+  "Sao Tome and Principe",
+  "Saudi Arabia",
+  "Senegal",
+  "Serbia",
+  "Seychelles",
+  "Sierra Leone",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "Solomon Islands",
+  "Somalia",
+  "South Africa",
+  "South Sudan",
+  "Spain",
+  "Sri Lanka",
+  "Sudan",
+  "Suriname",
+  "Sweden",
+  "Switzerland",
+  "Syria",
+  "Taiwan",
+  "Tajikistan",
+  "Tanzania",
+  "Thailand",
+  "Timor-Leste",
+  "Togo",
+  "Tonga",
+  "Trinidad and Tobago",
+  "Tunisia",
+  "Turkey",
+  "Turkmenistan",
+  "Tuvalu",
+  "Uganda",
+  "Ukraine",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+  "Uruguay",
+  "Uzbekistan",
+  "Vanuatu",
+  "Vatican City",
+  "Venezuela",
+  "Vietnam",
+  "Yemen",
+  "Zambia",
+  "Zimbabwe",
+];
 
 const ShortUrlAndQR = () => {
   const [activeTab, setActiveTab] = useState("shortener");
@@ -27,6 +223,22 @@ const ShortUrlAndQR = () => {
   const [loading, setLoading] = useState(false);
   const [shortUrl, setShortUrl] = useState("");
   const { user, theme } = useContext(AuthContext);
+  const [blockedCountries, setBlockedCountries] = useState([]);
+
+  const handleCountrySelect = (e) => {
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    if (checked) {
+      setBlockedCountries((prev) => [...prev, value]);
+    } else {
+      setBlockedCountries((prev) => prev.filter((c) => c !== value));
+    }
+  };
+
+  useEffect(()=>{
+    console.log(blockedCountries)
+  },[blockedCountries])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,6 +288,7 @@ const ShortUrlAndQR = () => {
           destinationUrl: finalUrl,
           slugName: formData.slugName,
           protected: formData.protected,
+          blockedCountries:blockedCountries,
           password: formData.protected ? formData.password : "",
           tags: formData.tags
             ? formData.tags.split(",").map((tag) => tag.trim())
@@ -119,17 +332,12 @@ const ShortUrlAndQR = () => {
   useEffect(() => {
     if (!qrUrl || !canvas.current) return;
 
-    QRCode.toCanvas(
-      canvas.current,
-      qrUrl,
-      { width: 200 },
-      (err) => {
-        if (err) {
-          setError("Error generating QR code: " + err.message);
-          setQrUrl("");
-        }
+    QRCode.toCanvas(canvas.current, qrUrl, { width: 200 }, (err) => {
+      if (err) {
+        setError("Error generating QR code: " + err.message);
+        setQrUrl("");
       }
-    );
+    });
   }, [qrUrl]);
 
   function downloadQRCode() {
@@ -156,9 +364,7 @@ const ShortUrlAndQR = () => {
   }
 
   return (
-    <div
-      className="min-h-[80vh] flex flex-col items-center p-6"
-    >
+    <div className="min-h-[80vh] flex flex-col items-center p-6">
       <div>
         {/* Tabs */}
         <div role="tablist" className="tabs tabs-lift mb-6 ml-4">
@@ -221,9 +427,7 @@ const ShortUrlAndQR = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs font-medium">
-                        utm_source
-                      </label>
+                      <label className="text-xs font-medium">utm_source</label>
                       <input
                         type="text"
                         name="utm_source"
@@ -233,9 +437,7 @@ const ShortUrlAndQR = () => {
                     </div>
 
                     <div>
-                      <label className="text-xs font-medium">
-                        utm_medium
-                      </label>
+                      <label className="text-xs font-medium">utm_medium</label>
                       <input
                         type="text"
                         name="utm_medium"
@@ -353,11 +555,33 @@ const ShortUrlAndQR = () => {
                   </div>
                 )}
 
+                <div className="flex flex-col gap-y-2.5">
+                  <span className="font-bold">Restrict Countries</span>
+
+                  <div className="max-h-40 overflow-y-auto border-none p-3 rounded-lg">
+                    {countries.map((country, idx) => (
+                      <label
+                        key={idx}
+                        className="flex items-center gap-x-2 mb-1"
+                      >
+                        <input
+                          type="checkbox"
+                          value={country}
+                          onChange={(e) => handleCountrySelect(e)}
+                        />
+                        <span>{country}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Button */}
                 <button
                   type="submit"
                   className={`w-full bg-blue-500 text-white py-2 rounded-sm flex items-center justify-center ${
-                    loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
+                    loading
+                      ? "opacity-70 cursor-not-allowed"
+                      : "hover:bg-blue-600"
                   }`}
                   disabled={loading}
                 >
@@ -420,9 +644,7 @@ const ShortUrlAndQR = () => {
                 onKeyDown={(e) => e.key === "Enter" && createQRCode()}
               />
 
-              {error && (
-                <div className="text-sm text-red-500">{error}</div>
-              )}
+              {error && <div className="text-sm text-red-500">{error}</div>}
 
               <button
                 className="btn bg-blue-500 text-white w-full"

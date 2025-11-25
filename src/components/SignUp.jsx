@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import SignupImage from "../assets/signup.svg";
-
+import toast from  "react-hot-toast"
 const Signup = () => {
   const [form, setForm] = useState({
     username: "",
@@ -23,7 +23,7 @@ const Signup = () => {
           withCredentials: true,
         }
       );
-      alert(res.data.message);
+      toast.success(res.data.message);
     } catch (err) {
       alert(err.response?.data?.message || "Signup failed");
     }

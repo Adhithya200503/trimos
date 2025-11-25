@@ -12,6 +12,7 @@ import { AuthContext } from "../context/authContext";
 import axios from "axios";
 import { FaCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const UserProfile = () => {
   const { user } = useContext(AuthContext);
   const [alert, setAlert] = useState({ type: "", message: "" });
@@ -98,7 +99,10 @@ const UserProfile = () => {
   const handleAddDomain = async (e) => {
     e.preventDefault();
     if (!domainName.trim()) return;
-
+    if (domainName.startsWith("https") || domainName.startsWith("http")){
+      toast.error("Enter Domain Name");
+      return 
+    }
     try {
       setLoading(true);
       const res = await axios.post(
