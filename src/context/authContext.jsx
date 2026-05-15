@@ -32,11 +32,21 @@ export const AuthProvider = ({ children }) => {
         fetchUser();
 
         const getTheme = ()=>{
-            const themeMode = localStorage.getItem("theme");
-            if(!theme){
+            let themeMode = localStorage.getItem("theme");
+            if(!themeMode){
                 localStorage.setItem("theme","LightMode");
+                themeMode = "LightMode";
             }
             setTheme(themeMode);
+            
+            // Apply theme to HTML tag for DaisyUI and Tailwind
+            const isDark = themeMode === "DarkMode";
+            document.documentElement.setAttribute('data-theme', isDark ? "dark" : "light");
+            if (isDark) {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
+            }
         }
 
         getTheme();
@@ -52,9 +62,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     const toggleTheme = ()=>{
-        localStorage.setItem("theme",theme=="LightMode"?"DarkMode":"LightMode")
-        setTheme(theme=="LightMode"?"DarkMode":"LightMode");
+        const newTheme = theme === "LightMode" ? "DarkMode" : "LightMode";
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
         
+        // Apply theme to HTML tag for DaisyUI and Tailwind
+        const isDark = newTheme === "DarkMode";
+        document.documentElement.setAttribute('data-theme', isDark ? "dark" : "light");
+        if (isDark) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
     }
     return (
         <AuthContext.Provider value={{ setUser, user, loading, logout , toggleTheme , theme}}>

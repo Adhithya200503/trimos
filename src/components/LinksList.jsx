@@ -98,7 +98,7 @@ const LinksList = ({
                 href={link.shortUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="link text-[#2A5BDA] dark:text-white no-underline"
+                className="link text-primary no-underline"
               >
                 {link.shortUrl}
               </a>
@@ -107,7 +107,7 @@ const LinksList = ({
               </div>
             </div>
 
-            <p className="text-sm text-gray-500 truncate flex items-center gap-2">
+            <p className="text-sm text-base-content/70 truncate flex items-center gap-2">
               <RefreshCcw size={14} />
               <a
                 href={link.destinationUrl}
@@ -126,23 +126,23 @@ const LinksList = ({
                 link.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="badge select-none rounded-sm bg-gray-200 dark:bg-blue-500"
+                    className="badge select-none rounded-sm badge-neutral"
                   >
                     {tag}
                   </span>
                 ))
               ) : (
-                <span className="text-gray-400 text-sm">No tags</span>
+                <span className="text-base-content/60 text-sm">No tags</span>
               )}
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-gray-400 mt-2">
+            <div className="flex items-center gap-4 text-xs text-base-content/60 mt-2">
               <div
                 className="tooltip hover:tooltip-open hover:tooltip-top"
                 data-tip="Analytics"
               >
                 <SiSimpleanalytics
-                  className="hover:text-black cursor-pointer"
+                  className="hover:text-base-content cursor-pointer"
                   size={10}
                   onClick={() => navigate(`/analytics/${link.slugName}`)}
                 />
@@ -183,8 +183,8 @@ const LinksList = ({
                     onClick={() => handleActiveToggle(link._id, link.slugName)}
                     className={`${
                       link.isActive
-                        ? "text-red-700"
-                        : "text-black dark:text-white"
+                        ? "text-error"
+                        : "text-base-content/60"
                     } cursor-pointer`}
                   />
                   {link.isActive ? "Active" : "Inactive"}

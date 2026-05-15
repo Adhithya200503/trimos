@@ -79,13 +79,28 @@ const Setting = () => {
     <div className="p-4">
       <div className="text-xl font-semibold mb-3">API Tokens</div>
 
-      {/* Create Button */}
-      <button
-        className="btn mb-4 bg-blue-600 text-white"
-        onClick={() => document.getElementById("my_modal_1").showModal()}
-      >
-        Create Token
-      </button>
+      {/* Buttons Row */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <button
+          className="btn btn-primary"
+          onClick={() => document.getElementById("my_modal_1").showModal()}
+        >
+          Create Token
+        </button>
+
+        <a
+          href={`${import.meta.env.VITE_BACKEND_URL.replace("/api/v1", "")}/api/docs`}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-outline btn-accent flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm1 1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1"/>
+            <path d="M8.5 6.5a.5.5 0 0 0-1 0v1H6.5a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1z"/>
+          </svg>
+          Try it out
+        </a>
+      </div>
 
   
       <dialog id="my_modal_1" className="modal">
@@ -94,7 +109,7 @@ const Setting = () => {
 
           <input
             type="text"
-            className="px-4 py-2 border border-gray-400 w-full rounded-sm"
+            className="input input-bordered w-full rounded-sm"
             placeholder="Enter Token Name"
             value={tokenName}
             onChange={(e) => setTokenName(e.target.value)}
@@ -103,10 +118,10 @@ const Setting = () => {
           <div className="modal-action">
             <form method="dialog">
               <div className="flex gap-3">
-                <button className="btn bg-gray-300">Close</button>
+                <button className="btn">Close</button>
                 <button
                   type="button"
-                  className="btn bg-blue-600 text-white"
+                  className="btn btn-primary"
                   onClick={createToken}
                 >
                   Submit
@@ -120,14 +135,14 @@ const Setting = () => {
       {userTokens.length === 0 ? (
         <p>No Tokens Found</p>
       ) : (
-        <ul className="bg-white  p-4  md:w-lg">
+        <ul className="bg-base-100 shadow-sm rounded-md p-4 md:w-lg">
           {userTokens.map((token, idx) => (
-            <li key={idx} className="flex justify-between items-center  py-2">
-              <span className="font-medium">{token.tokenName}</span>
-              <span className="text-gray-600">{token.tokenId}</span>
+            <li key={idx} className="flex justify-between items-center py-2">
+              <span className="font-medium text-base-content">{token.tokenName}</span>
+              <span className="text-base-content/70">{token.tokenId}</span>
               <Trash2
                 size={20}
-                className="text-red-500 cursor-pointer"
+                className="text-error cursor-pointer"
                 onClick={() => deleteToken(token.tokenName)}
               />
             </li>
@@ -143,7 +158,7 @@ const Setting = () => {
           </span>
         </div>
         <div className="pt-4">
-          <button className={`btn rounded-none ${theme==="DarkMode"?"":"bg-gray-800 text-white"}`} onClick={toggleTheme}>
+          <button className="btn btn-outline rounded-none" onClick={toggleTheme}>
             {theme == "DarkMode" ? (
               <>
                 <IoSunnyOutline size={20} />

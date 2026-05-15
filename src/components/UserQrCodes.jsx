@@ -75,14 +75,14 @@ const UserQrCodes = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
       {qrCodes.length === 0 ? (
-        <p className="text-center text-gray-600 dark:text-white">
+        <p className="text-center text-base-content/70">
           No QR codes found. Create one to get started!
         </p>
       ) : (
         qrCodes.map((code, index) => (
           <div
             key={code._id}
-            className="bg-white dark:bg-gray-800 shadow-md rounded-sm p-5 flex flex-col items-center justify-between w-full max-w-xs mx-auto"
+            className="bg-base-100 shadow-sm rounded-sm p-5 flex flex-col items-center justify-between w-full max-w-xs mx-auto"
           >
         
             <img
@@ -93,13 +93,13 @@ const UserQrCodes = () => {
 
             {/* Info */}
             <div className="w-full text-center mb-4">
-              <p className="text-sm text-gray-700 dark:text-gray-200 truncate">
+              <p className="text-sm text-base-content/80 truncate">
                 <strong>Destination:</strong>{" "}
                 <span className="break-all text-blue-500">
                   {code.destinationUrl}
                 </span>
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-base-content/60 mt-1">
                 <strong>Created At:</strong> {code.createdAt.slice(0, 10)}
               </p>
             </div>

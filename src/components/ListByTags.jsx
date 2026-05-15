@@ -165,7 +165,7 @@ const ListByTags = () => {
       <div className="block xl:hidden mb-4">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center justify-between w-full bg-gray-100 dark:bg-black px-4 py-2 rounded-md text-sm font-medium shadow-sm hover:bg-gray-200 dark:hover:bg-gray-200"
+          className="flex items-center justify-between w-full bg-base-200 px-4 py-2 rounded-md text-sm font-medium shadow-sm hover:bg-base-300"
         >
           <span className="flex items-center gap-2">
             <TagIcon size={16} /> Filter by Tags
@@ -179,11 +179,11 @@ const ListByTags = () => {
         </button>
 
         {showDropdown && (
-          <div className="mt-2 bg-white dark:bg-black border border-gray-300 rounded-md shadow-md p-3">
+          <div className="mt-2 bg-base-100 border border-base-300 rounded-md shadow-md p-3">
             { loadingTags ? (
               <Loader />
             ) : tags.length === 0 ? (
-              <div className="flex items-center justify-center py-6 text-sm text-gray-500">
+              <div className="flex items-center justify-center py-6 text-sm text-base-content/70">
                 <IoPricetagOutline className="mr-2" />
                 No tags found
               </div>
@@ -210,7 +210,7 @@ const ListByTags = () => {
       </div>
 
       {/* Sidebar for large screens */}
-      <div className="hidden lg:block tag-filter w-[200px] border-r-2 border-gray-300 min-h-[80vh]">
+      <div className="hidden lg:block tag-filter w-[200px] border-r-2 border-base-300 min-h-[80vh]">
         {loadingTags ? (
            <Loader />
         ) : tags.length === 0 ? (
