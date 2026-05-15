@@ -4,6 +4,7 @@
 
 🌐 **Live App:** [https://trimurl.site](https://trimurl.site)
 📄 **API Docs:** [https://trim-url-gpxt.onrender.com/api/docs/](https://trim-url-gpxt.onrender.com/api/docs/)
+🗄️ **Backend Repo:** [github.com/Adhithya200503/trimos-backend](https://github.com/Adhithya200503/trimos-backend)
 
 ---
 
@@ -183,6 +184,9 @@ TrimUrl supports two authentication methods:
 - Frontend: [https://trimurl.site](https://trimurl.site)
 - Backend API: [https://trim-url-gpxt.onrender.com](https://trim-url-gpxt.onrender.com)
 - API Docs: [https://trim-url-gpxt.onrender.com/api/docs/](https://trim-url-gpxt.onrender.com/api/docs/)
+
+**GitHub Repositories:**
+- Backend: [github.com/Adhithya200503/trimos-backend](https://github.com/Adhithya200503/trimos-backend)
 
 ---
 
